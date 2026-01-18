@@ -1,0 +1,215 @@
+name: htap-demo
+
+networks:
+  htap-net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16
+          gateway: 172.20.0.1
+
+volumes:
+  kafka-data:
+  analytics-jars:
+
+
+services:
+
+###############################################################################
+## Infrastructure Services
+###############################################################################
+
+  kafka:
+    image: apache/kafka:4.1.1
+    container_name: kafka
+    networks: [htap-net]
+    ports:
+      - "9092:9092"
+    volumes:
+      - kafka-data:/var/lib/kafka/data
+    environment:
+      # KRaft combined mode (single node, no ZooKeeper)
+      KAFKA_NODE_ID: "1"
+      KAFKA_PROCESS_ROLES: "broker,controller"
+      KAFKA_CONTROLLER_LISTENER_NAMES: "CONTROLLER"
+      KAFKA_CONTROLLER_QUORUM_VOTERS: "1@kafka:9093"
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
+
+      # Two listeners:
+      # - Internal Docker/Podman network: kafka:19092 (used by other services)
+      # - Host: localhost:9092
+      KAFKA_LISTENERS: "PLAINTEXT://:19092,PLAINTEXT_HOST://:9092,CONTROLLER://:9093"
+      KAFKA_ADVERTISED_LISTENERS: "PLAINTEXT://kafka:19092,PLAINTEXT_HOST://localhost:9092"
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: "CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT"
+      KAFKA_INTER_BROKER_LISTENER_NAME: "PLAINTEXT"
+
+      # Single-node dev-friendly factors
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: "1"
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: "1"
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: "1"
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: "0"
+      KAFKA_NUM_PARTITIONS: "3"
+    healthcheck:
+      test: ["CMD-SHELL", "bash -lc '/opt/kafka/bin/kafka-topics.sh --bootstrap-server kafka:19092 --list >/dev/null 2>&1'"]
+      interval: 10s
+      timeout: 5s
+      retries: 30
+
+  cassandra:
+    build:
+      context: ./cassandra
+    container_name: cassandra
+    hostname: cassandra
+    networks:
+      htap-net:
+        ipv4_address: 172.20.0.10
+    ports:
+      - "9042:9042"
+      - "9043:9043"
+      - "7000:7000"
+    volumes:
+      - ./cassandra-data:/var/lib/cassandra
+      - ./cassandra/sidecar.yaml:/config/sidecar.yaml:ro
+    environment:
+      CASSANDRA_CLUSTER_NAME: "${CASSANDRA_CLUSTER_NAME:-htap-demo}"
+      CASSANDRA_NUM_TOKENS: "${CASSANDRA_NUM_TOKENS:-16}"
+      # JVM heap settings to prevent OOM kills
+      MAX_HEAP_SIZE: "${CASSANDRA_MAX_HEAP_SIZE:-4G}"
+    # Container memory limits (should be higher than MAX_HEAP_SIZE to account for off-heap memory)
+    mem_limit: "${CASSANDRA_MEM_LIMIT:-8g}"
+    memswap_limit: "${CASSANDRA_MEM_LIMIT:-8g}"
+    healthcheck:
+      test: ["CMD-SHELL", "bash -lc 'cqlsh -e \"DESCRIBE KEYSPACES\" cassandra 9042 && curl -f http://localhost:9043/api/v1/__health'>/dev/null 2>&1"]
+      interval: 15s
+      timeout: 10s
+      retries: 40
+      start_period: 60s
+
+  cassandra-analytics:
+    image: alpine/curl:8.17.0
+    container_name: cassandra-analytics
+    networks: [htap-net]
+    volumes:
+      - analytics-jars:/opt/analytics/jars
+      - ./cassandra-analytics/download-jars.sh:/download-jars.sh:ro
+    command: >
+      sh /download-jars.sh
+
+  spark:
+    image: apache/spark:3.5.7-scala2.12-java17-python3-ubuntu
+    container_name: spark
+    hostname: spark
+    networks: [htap-net]
+    depends_on:
+      cassandra:
+        condition: service_healthy
+      cassandra-analytics:
+        condition: service_started
+    ports:
+      - "7077:7077"   # Spark master
+      - "8080:8080"   # Spark master UI
+      - "8081:8081"   # Spark worker UI
+      - "4040:4040"   # First Spark app UI
+    volumes:
+      - ./spark/conf/spark-defaults.conf:/opt/spark/conf/spark-defaults.conf:ro
+      - ./spark/jobs:/opt/spark/jobs:rw
+      - analytics-jars:/opt/analytics/jars:ro
+    environment:
+      # Handy for jobs that need the analytics jars on both driver/executor classpaths
+      SPARK_DRIVER_EXTRA_CLASSPATH: "/opt/analytics/jars/*"
+      SPARK_EXECUTOR_EXTRA_CLASSPATH: "/opt/analytics/jars/*"
+      # Set home directory for Ivy cache (needed for --packages)
+      HOME: "/opt/spark/work-dir"
+      IVY_HOME: "/opt/spark/work-dir/.ivy2"
+    command: >
+      bash -lc '
+        set -euo pipefail;
+        /opt/spark/sbin/start-master.sh --host spark;
+        /opt/spark/sbin/start-worker.sh spark://spark:7077;
+        tail -f /opt/spark/logs/* || tail -f /dev/null
+      '
+
+  presto:
+    image: prestodb/presto:0.296
+    container_name: presto
+    networks: [htap-net]
+    depends_on:
+      cassandra:
+        condition: service_healthy
+      spark:
+        condition: service_started
+    ports:
+      # PrestoDB web/UI and client port
+      - "8088:8080"
+    volumes:
+      - ./presto/etc:/opt/presto-server/etc:ro
+      # Placeholder for your custom Sidecar/SSTable connector plugin JAR(s)
+      #- ./presto/plugin/sstable:/opt/presto-server/plugin/sstable:rw
+
+  postgres-shim:
+    build:
+      context: ./jeff-sql-poc
+    container_name: postgres-shim
+    networks: [htap-net]
+    depends_on:
+      cassandra:
+        condition: service_healthy
+    ports:
+      - "${JEFF_SQL_PORT:-9040}:9040"
+    environment:
+      CASSANDRA_HOST: "cassandra"
+      CASSANDRA_PORT: "9042"
+      KAFKA_BOOTSTRAP: "kafka:19092"
+
+
+###############################################################################
+## Demo Application Services
+###############################################################################
+
+  data-producer:
+    build:
+      context: ./ingress/producer
+    container_name: data-producer
+    networks: [htap-net]
+    depends_on:
+      kafka:
+        condition: service_healthy
+      data-cassandra-sink:
+        condition: service_started
+    environment:
+      KAFKA_BOOTSTRAP: "kafka:19092"
+      TOPIC: "${DEMO_TOPIC:-demo-events}"
+      EVENTS_PER_SEC: "${DEMO_EVENTS_PER_SEC:-500}"
+      PAYLOAD_BYTES: "${DEMO_PAYLOAD_BYTES:-256}"
+      PRODUCER_CLIENT_ID: "demo-producer"
+    restart: unless-stopped
+
+  data-cassandra-sink:
+    build:
+      context: ./ingress/consumer
+    container_name: data-cassandra-sink
+    networks: [htap-net]
+    depends_on:
+      kafka:
+        condition: service_healthy
+      cassandra:
+        condition: service_healthy
+    environment:
+      KAFKA_BOOTSTRAP: "kafka:19092"
+      TOPIC: "${DEMO_TOPIC:-demo-events}"
+      GROUP_ID: "${DEMO_GROUP_ID:-demo-cassandra-sink}"
+      CASSANDRA_HOST: "cassandra"
+      CASSANDRA_PORT: "9042"
+      KEYSPACE: "${DEMO_KEYSPACE:-demo}"
+      TABLE: "${DEMO_TABLE:-events}"
+      BATCH_SIZE: "${DEMO_BATCH_SIZE:-200}"
+      LOG_EVERY: "${DEMO_LOG_EVERY:-2000}"
+    restart: unless-stopped
+
+    # once running, try the following commands:
+    #
+    # podman exec -it cassandra cqlsh -e "SELECT COUNT(*) FROM demo.events;" cassandra
+    #
+    # watch --color 'podman exec -it cassandra cqlsh -e "SELECT COUNT(*) FROM demo.events;" cassandra'
+    #
+    #
