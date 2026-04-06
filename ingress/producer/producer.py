@@ -248,12 +248,30 @@ class FleetState:
         self._initialize_text_cache(n)
 
     def _initialize_geographic_origins(self, n: int) -> None:
-        """Initialize entity origin coordinates and coordinate conversion factors."""
-        # Origins: keep away from poles for numeric stability (demo convenience)
-        self.lat0 = self.rng.uniform(-70.0, 70.0, n).astype(np.float64)
-        self.lon0 = self.rng.uniform(-180.0, 180.0, n).astype(np.float64)
+        """Initialize entity origin coordinates and coordinate conversion factors.
         
-        # Coordinate conversion factors
+        Geo-fenced to Oslo, Norway area for HTAP Mission Control demo.
+        Center: ~59.91°N, 10.75°E with ~5km radius spread.
+        """
+        # Oslo bounding box (approximately 8km x 8km area)
+        # This keeps all drones visible on a single map view
+        oslo_center_lat = 59.91
+        oslo_center_lon = 10.75
+        lat_spread = 0.06   # ~6.7km north-south
+        lon_spread = 0.12   # ~8km east-west at this latitude
+        
+        self.lat0 = self.rng.uniform(
+            oslo_center_lat - lat_spread,
+            oslo_center_lat + lat_spread,
+            n
+        ).astype(np.float64)
+        self.lon0 = self.rng.uniform(
+            oslo_center_lon - lon_spread,
+            oslo_center_lon + lon_spread,
+            n
+        ).astype(np.float64)
+        
+        # Coordinate conversion factors (at Oslo latitude)
         self.inv_m_per_deg_lat = 1.0 / 111_320.0
         self.inv_m_per_deg_lon = 1.0 / (111_320.0 * np.cos(np.deg2rad(self.lat0)).clip(0.2, None))
 

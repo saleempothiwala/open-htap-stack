@@ -1,0 +1,11 @@
+# HTAP Mission Control Backend Dependencies
+fastapi==0.115.6
+uvicorn[standard]==0.34.0
+pydantic==2.10.4
+pydantic-settings==2.7.1
+cassandra-driver==3.29.2
+trino==0.332.0
+httpx==0.28.1
+python-dotenv==1.0.1
+psutil==6.1.1
+docker==7.1.0

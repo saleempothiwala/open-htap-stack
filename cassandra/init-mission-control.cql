@@ -1,0 +1,142 @@
+-- HTAP Mission Control: Additional tables for drone telemetry, alerts, and zones
+-- Run this after the existing demo keyspace is created
+
+-- ============================================================
+-- Table 1: drone_latest_status
+-- Purpose: Fast live map and current fleet KPIs
+-- Updated on every new event; always holds the most recent state per drone
+-- ============================================================
+CREATE TABLE IF NOT EXISTS demo.drone_latest_status (
+  entity_id text PRIMARY KEY,
+  event_id timeuuid,
+  event_time timestamp,
+  event_type text,
+  observer_id text,
+  latitude double,
+  longitude double,
+  altitude_m float,
+  temp_external_c float,
+  temp_internal_c float,
+  speed_mps double,
+  heading_deg double,
+  is_flying boolean,
+  telemetry_age_s int,
+  near_restricted_zone boolean,
+  predicted_zone_breach boolean,
+  risk_score double,
+  updated_at timestamp
+);
+
+-- ============================================================
+-- Table 2: drone_events_by_entity
+-- Purpose: Historical playback, per-drone analysis, forecasting
+-- Partitioned by entity_id, clustered by event_time descending
+-- ============================================================
+CREATE TABLE IF NOT EXISTS demo.drone_events_by_entity (
+  entity_id text,
+  event_time timestamp,
+  event_id timeuuid,
+  event_type text,
+  observer_id text,
+  latitude double,
+  longitude double,
+  altitude_m float,
+  temp_external_c float,
+  temp_internal_c float,
+  speed_mps double,
+  heading_deg double,
+  zone_id text,
+  PRIMARY KEY ((entity_id), event_time, event_id)
+) WITH CLUSTERING ORDER BY (event_time DESC, event_id DESC);
+
+-- ============================================================
+-- Table 3: restricted_zones
+-- Purpose: Define no-fly / restricted airspace zones
+-- ============================================================
+CREATE TABLE IF NOT EXISTS demo.restricted_zones (
+  zone_id text PRIMARY KEY,
+  zone_name text,
+  polygon_wkt text,
+  severity text,
+  enabled boolean,
+  updated_at timestamp
+);
+
+-- ============================================================
+-- Table 4: alerts_by_bucket
+-- Purpose: Current and recent incident alerts, bucketed by hour
+-- ============================================================
+CREATE TABLE IF NOT EXISTS demo.alerts_by_bucket (
+  bucket text,
+  alert_time timestamp,
+  entity_id text,
+  alert_id timeuuid,
+  alert_type text,
+  severity text,
+  zone_id text,
+  latitude double,
+  longitude double,
+  altitude_m float,
+  message text,
+  risk_score double,
+  PRIMARY KEY ((bucket), alert_time, entity_id, alert_id)
+) WITH CLUSTERING ORDER BY (alert_time DESC, entity_id ASC, alert_id DESC);
+
+-- ============================================================
+-- Seed Data: Demo Restricted Zones (Oslo, Norway area)
+-- ============================================================
+
+-- Zone 1: Oslo Airport Gardermoen (critical aviation zone)
+INSERT INTO demo.restricted_zones (zone_id, zone_name, polygon_wkt, severity, enabled, updated_at)
+VALUES (
+  'zone-oslo-airport',
+  'Oslo Lufthavn Gardermoen',
+  'POLYGON((11.05 60.18, 11.15 60.18, 11.15 60.22, 11.05 60.22, 11.05 60.18))',
+  'critical',
+  true,
+  toTimestamp(now())
+);
+
+-- Zone 2: Royal Palace / Government Quarter
+INSERT INTO demo.restricted_zones (zone_id, zone_name, polygon_wkt, severity, enabled, updated_at)
+VALUES (
+  'zone-royal-palace',
+  'Det Kongelige Slott',
+  'POLYGON((10.72 59.91, 10.74 59.91, 10.74 59.92, 10.72 59.92, 10.72 59.91))',
+  'critical',
+  true,
+  toTimestamp(now())
+);
+
+-- Zone 3: Fornebu / tech park area
+INSERT INTO demo.restricted_zones (zone_id, zone_name, polygon_wkt, severity, enabled, updated_at)
+VALUES (
+  'zone-fornebu',
+  'Fornebu Tech Park',
+  'POLYGON((10.62 59.88, 10.66 59.88, 10.66 59.90, 10.62 59.90, 10.62 59.88))',
+  'warning',
+  true,
+  toTimestamp(now())
+);
+
+-- Zone 4: Kjeller Airfield (historic airfield, north-east of Oslo)
+INSERT INTO demo.restricted_zones (zone_id, zone_name, polygon_wkt, severity, enabled, updated_at)
+VALUES (
+  'zone-kjeller',
+  'Kjeller Flyplass',
+  'POLYGON((10.98 59.96, 11.02 59.96, 11.02 59.98, 10.98 59.98, 10.98 59.96))',
+  'warning',
+  true,
+  toTimestamp(now())
+);
+
+-- Zone 5: Akershus Fortress
+INSERT INTO demo.restricted_zones (zone_id, zone_name, polygon_wkt, severity, enabled, updated_at)
+VALUES (
+  'zone-akershus',
+  'Akershus Festning',
+  'POLYGON((10.73 59.905, 10.745 59.905, 10.745 59.912, 10.73 59.912, 10.73 59.905))',
+  'warning',
+  true,
+  toTimestamp(now())
+);
