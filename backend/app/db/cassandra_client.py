@@ -1,11 +1,21 @@
 """Cassandra database client for HTAP Mission Control."""
 import time
 from typing import List, Optional, Dict, Any
-from cassandra.cluster import Cluster, Session
+from cassandra.cluster import Cluster, Session, ExecutionProfile, EXEC_PROFILE_DEFAULT
 from cassandra.query import SimpleStatement
+from cassandra.policies import DCAwareRoundRobinPolicy, WhiteListRoundRobinPolicy
+from cassandra.pool import Host
 from datetime import datetime, timezone
 
 from app.config import settings
+
+
+class LocalhostAddressTranslator:
+    """Translates all Cassandra node addresses to localhost for local development."""
+    
+    def translate(self, addr):
+        # Map any container internal IP to localhost
+        return "127.0.0.1"
 
 
 class CassandraClient:
@@ -25,13 +35,25 @@ class CassandraClient:
         max_retries = 30
         while retries < max_retries:
             try:
+                # Use address translator to map container IPs to localhost
+                # This is critical when running locally against containerized Cassandra
+                translator = LocalhostAddressTranslator()
+                lb_policy = WhiteListRoundRobinPolicy(["127.0.0.1"])
+                
+                profile = ExecutionProfile(
+                    load_balancing_policy=lb_policy,
+                )
+                
                 self._cluster = Cluster(
-                    [settings.cassandra_host],
+                    contact_points=["127.0.0.1"],
                     port=settings.cassandra_port,
+                    address_translator=translator,
+                    execution_profiles={EXEC_PROFILE_DEFAULT: profile},
+                    protocol_version=4,
                 )
                 self._session = self._cluster.connect(settings.cassandra_keyspace)
                 self.connected = True
-                print(f"[db] Connected to Cassandra: {settings.cassandra_host}:{settings.cassandra_port}")
+                print(f"[db] Connected to Cassandra: 127.0.0.1:{settings.cassandra_port}")
                 return
             except Exception as e:
                 retries += 1

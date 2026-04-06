@@ -3,3 +3,34 @@ cassandra-data/*
 spark/ivy/cache/**/*.xml.original
 spark/ivy/cache/**/ivydata-*.properties
 spark/ivy/jars
+venv/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+dist/
+build/
+
+# Node.js
+node_modules/
+package-lock.json
+.next/
+out/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Environment
+.env.local
+.env.*.local
