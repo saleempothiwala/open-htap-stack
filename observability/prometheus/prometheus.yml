@@ -1,0 +1,22 @@
+global:
+  scrape_interval: 5s
+  evaluation_interval: 5s
+
+scrape_configs:
+  - job_name: "prometheus"
+    static_configs:
+      - targets: ["localhost:9090"]
+
+  - job_name: "node-exporter"
+    static_configs:
+      - targets: ["node-exporter:9100"]
+
+  # Optional later. Add your FastAPI metrics endpoint here if you expose /metrics
+  # - job_name: "fastapi"
+  #   static_configs:
+  #     - targets: ["backend:8000"]
+
+  # Optional later. Add other services if they expose Prometheus metrics
+  # - job_name: "trino"
+  # - job_name: "kafka"
+  # - job_name: "spark"
