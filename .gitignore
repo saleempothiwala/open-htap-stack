@@ -1,8 +1,9 @@
-cassandra-data/*
+# Cassandra data
+cassandra-data/
 
-spark/ivy/cache/**/*.xml.original
-spark/ivy/cache/**/ivydata-*.properties
-spark/ivy/jars
+# Spark Ivy cache - ignore all cache data
+spark/ivy/cache/
+spark/ivy/jars/
 venv/
 
 # Python

@@ -174,7 +174,7 @@ class CassandraClient:
         """Get all enabled restricted zones."""
         rows = self.execute_query(
             "SELECT zone_id, zone_name, polygon_wkt, severity, enabled "
-            "FROM restricted_zones WHERE enabled = true"
+            "FROM restricted_zones WHERE enabled = true ALLOW FILTERING"
         )
         return rows
 

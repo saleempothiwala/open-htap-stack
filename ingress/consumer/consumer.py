@@ -384,7 +384,7 @@ class AlertGenerator:
     def load_zones(self):
         """Load restricted zones from Cassandra into memory cache."""
         try:
-            rows = self.session.execute("SELECT zone_id, zone_name, polygon_wkt, severity, enabled FROM demo.restricted_zones WHERE enabled = true")
+            rows = self.session.execute("SELECT zone_id, zone_name, polygon_wkt, severity, enabled FROM demo.restricted_zones WHERE enabled = true ALLOW FILTERING")
             self._zones_cache = [
                 {
                     "zone_id": r.zone_id,

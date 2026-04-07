@@ -46,18 +46,30 @@ def _to_zone(row: Dict[str, Any]) -> RestrictedZone:
 
 
 @router.get("/live")
-async def get_map_live():
+async def get_map_live(limit: int = 100):
+    """Get live map data.
+    
+    Args:
+        limit: Max number of drones to return (default 100 for performance)
+    """
     if not cassandra_client.connected:
         return MapLiveResponse(drones=[], zones=[], timestamp=datetime.now(timezone.utc).isoformat())
     try:
         drones_raw = cassandra_client.get_all_drones()
         zones_raw = cassandra_client.get_zones()
+        
+        # Apply limit - take a sample from the global dataset
+        drones_raw = drones_raw[:limit]
+        
         return MapLiveResponse(
             drones=[_row_to_drone(r) for r in drones_raw],
             zones=[_to_zone(r) for r in zones_raw],
             timestamp=datetime.now(timezone.utc).isoformat(),
         )
-    except Exception:
+    except Exception as e:
+        print(f"[map] Error in /live: {e}")
+        import traceback
+        traceback.print_exc()
         return MapLiveResponse(drones=[], zones=[], timestamp=datetime.now(timezone.utc).isoformat())
 
 
