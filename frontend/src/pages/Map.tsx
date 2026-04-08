@@ -1,4 +1,4 @@
-let us cimport { useEffect, useState, useRef } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { MapContainer, TileLayer, Marker, Popup, Circle, useMap } from 'react-leaflet'
 import { Icon, LatLngExpression } from 'leaflet'
 import { useQuery } from '@tanstack/react-query'
@@ -140,17 +140,17 @@ export default function MapPage() {
   const defaultCenter: LatLngExpression = [0, 0]
   const center = allCoords.length > 0
     ? [
-        allCoords.reduce((s, c) => s + c[0], 0) / allCoords.length,
-        allCoords.reduce((s, c) => s + c[1], 0) / allCoords.length,
-      ] as LatLngExpression
+      allCoords.reduce((s, c) => s + c[0], 0) / allCoords.length,
+      allCoords.reduce((s, c) => s + c[1], 0) / allCoords.length,
+    ] as LatLngExpression
     : defaultCenter
 
   // Calculate bounds for fitBounds
   const bounds = allCoords.length > 0
     ? [
-        [Math.min(...allCoords.map(c => c[0])), Math.min(...allCoords.map(c => c[1]))] as [number, number],
-        [Math.max(...allCoords.map(c => c[0])), Math.max(...allCoords.map(c => c[1]))] as [number, number],
-      ] as [[number, number], [number, number]]
+      [Math.min(...allCoords.map(c => c[0])), Math.min(...allCoords.map(c => c[1]))] as [number, number],
+      [Math.max(...allCoords.map(c => c[0])), Math.max(...allCoords.map(c => c[1]))] as [number, number],
+    ] as [[number, number], [number, number]]
     : undefined
 
   return (
@@ -165,31 +165,28 @@ export default function MapPage() {
         <div className="flex gap-2">
           <button
             onClick={() => setFilter('all')}
-            className={`px-4 py-1.5 rounded text-xs font-bold uppercase tracking-wider transition-all ${
-              filter === 'all'
-                ? 'bg-[#99f7ff] text-[#005f64]'
-                : 'bg-[#20262f] text-[#a8abb3] hover:text-[#99f7ff]'
-            }`}
+            className={`px-4 py-1.5 rounded text-xs font-bold uppercase tracking-wider transition-all ${filter === 'all'
+              ? 'bg-[#99f7ff] text-[#005f64]'
+              : 'bg-[#20262f] text-[#a8abb3] hover:text-[#99f7ff]'
+              }`}
           >
             All ({drones.length})
           </button>
           <button
             onClick={() => setFilter('flying')}
-            className={`px-4 py-1.5 rounded text-xs font-bold uppercase tracking-wider transition-all ${
-              filter === 'flying'
-                ? 'bg-[#99f7ff] text-[#005f64]'
-                : 'bg-[#20262f] text-[#a8abb3] hover:text-[#99f7ff]'
-            }`}
+            className={`px-4 py-1.5 rounded text-xs font-bold uppercase tracking-wider transition-all ${filter === 'flying'
+              ? 'bg-[#99f7ff] text-[#005f64]'
+              : 'bg-[#20262f] text-[#a8abb3] hover:text-[#99f7ff]'
+              }`}
           >
             Flying ({drones.filter((d) => d.is_flying).length})
           </button>
           <button
             onClick={() => setFilter('warning')}
-            className={`px-4 py-1.5 rounded text-xs font-bold uppercase tracking-wider transition-all ${
-              filter === 'warning'
-                ? 'bg-[#ff7162] text-[#4a0001]'
-                : 'bg-[#20262f] text-[#a8abb3] hover:text-[#ff7162]'
-            }`}
+            className={`px-4 py-1.5 rounded text-xs font-bold uppercase tracking-wider transition-all ${filter === 'warning'
+              ? 'bg-[#ff7162] text-[#4a0001]'
+              : 'bg-[#20262f] text-[#a8abb3] hover:text-[#ff7162]'
+              }`}
           >
             Alerts ({drones.filter((d) => d.near_restricted_zone || d.predicted_zone_breach).length})
           </button>
@@ -226,76 +223,76 @@ export default function MapPage() {
                 crossOrigin="anonymous"
               />
 
-            {/* Restricted Zones */}
-            {zones.map((zone) => {
-              const coords = parseWktPolygon(zone.polygon_wkt)
-              if (coords.length === 0) return null
-              const color = getZoneColor(zone.severity)
-              return (
-                <Circle
-                  key={zone.zone_id}
-                  center={coords[0] as LatLngExpression}
-                  radius={2000}
-                  pathOptions={{
-                    color,
-                    fillColor: color,
-                    fillOpacity: 0.15,
-                    weight: 2,
-                    dashArray: '5, 5',
-                  }}
-                >
-                  <Popup>
-                    <div className="text-gray-900">
-                      <h3 className="font-bold">{zone.zone_name}</h3>
-                      <p className="text-xs text-gray-600 uppercase">{zone.severity}</p>
-                    </div>
-                  </Popup>
-                </Circle>
-              )
-            })}
-
-            {/* Drone Markers */}
-            {filteredDrones.map((drone) => {
-              if (!drone.latitude || !drone.longitude) return null
-              const position: LatLngExpression = [drone.latitude, drone.longitude]
-              const icon = getDroneIcon(drone)
-              return (
-                <Marker key={drone.entity_id} position={position} icon={icon}>
-                  <Popup>
-                    <div className="text-gray-900 min-w-[200px]">
-                      <h3 className="font-bold text-sm uppercase">{drone.entity_id}</h3>
-                      <div className="grid grid-cols-2 gap-x-4 gap-y-1 text-xs mt-2">
-                        <span className="text-gray-500">Status:</span>
-                        <span className={drone.is_flying ? 'text-green-600' : 'text-gray-400'}>
-                          {drone.is_flying ? 'Flying' : 'Grounded'}
-                        </span>
-                        <span className="text-gray-500">Speed:</span>
-                        <span>{drone.speed_mps.toFixed(1)} m/s</span>
-                        <span className="text-gray-500">Altitude:</span>
-                        <span>{drone.altitude_m.toFixed(0)} m</span>
-                        <span className="text-gray-500">Heading:</span>
-                        <span>{drone.heading_deg.toFixed(0)}°</span>
-                        <span className="text-gray-500">Temp Int:</span>
-                        <span>{drone.temp_internal_c.toFixed(1)}°C</span>
-                        <span className="text-gray-500">Temp Ext:</span>
-                        <span>{drone.temp_external_c.toFixed(1)}°C</span>
-                        <span className="text-gray-500">Risk:</span>
-                        <span className={drone.risk_score > 0.5 ? 'text-red-600' : 'text-gray-700'}>
-                          {(drone.risk_score * 100).toFixed(0)}%
-                        </span>
+              {/* Restricted Zones */}
+              {zones.map((zone) => {
+                const coords = parseWktPolygon(zone.polygon_wkt)
+                if (coords.length === 0) return null
+                const color = getZoneColor(zone.severity)
+                return (
+                  <Circle
+                    key={zone.zone_id}
+                    center={coords[0] as LatLngExpression}
+                    radius={2000}
+                    pathOptions={{
+                      color,
+                      fillColor: color,
+                      fillOpacity: 0.15,
+                      weight: 2,
+                      dashArray: '5, 5',
+                    }}
+                  >
+                    <Popup>
+                      <div className="text-gray-900">
+                        <h3 className="font-bold">{zone.zone_name}</h3>
+                        <p className="text-xs text-gray-600 uppercase">{zone.severity}</p>
                       </div>
-                      {drone.near_restricted_zone && (
-                        <p className="text-xs text-amber-600 mt-2 font-bold">⚠ NEAR RESTRICTED ZONE</p>
-                      )}
-                      {drone.predicted_zone_breach && (
-                        <p className="text-xs text-red-600 mt-2 font-bold">🚨 PREDICTED BREACH</p>
-                      )}
-                    </div>
-                  </Popup>
-                </Marker>
-              )
-            })}
-          </MapContainer>
+                    </Popup>
+                  </Circle>
+                )
+              })}
+
+              {/* Drone Markers */}
+              {filteredDrones.map((drone) => {
+                if (!drone.latitude || !drone.longitude) return null
+                const position: LatLngExpression = [drone.latitude, drone.longitude]
+                const icon = getDroneIcon(drone)
+                return (
+                  <Marker key={drone.entity_id} position={position} icon={icon}>
+                    <Popup>
+                      <div className="text-gray-900 min-w-[200px]">
+                        <h3 className="font-bold text-sm uppercase">{drone.entity_id}</h3>
+                        <div className="grid grid-cols-2 gap-x-4 gap-y-1 text-xs mt-2">
+                          <span className="text-gray-500">Status:</span>
+                          <span className={drone.is_flying ? 'text-green-600' : 'text-gray-400'}>
+                            {drone.is_flying ? 'Flying' : 'Grounded'}
+                          </span>
+                          <span className="text-gray-500">Speed:</span>
+                          <span>{drone.speed_mps.toFixed(1)} m/s</span>
+                          <span className="text-gray-500">Altitude:</span>
+                          <span>{drone.altitude_m.toFixed(0)} m</span>
+                          <span className="text-gray-500">Heading:</span>
+                          <span>{drone.heading_deg.toFixed(0)}°</span>
+                          <span className="text-gray-500">Temp Int:</span>
+                          <span>{drone.temp_internal_c.toFixed(1)}°C</span>
+                          <span className="text-gray-500">Temp Ext:</span>
+                          <span>{drone.temp_external_c.toFixed(1)}°C</span>
+                          <span className="text-gray-500">Risk:</span>
+                          <span className={drone.risk_score > 0.5 ? 'text-red-600' : 'text-gray-700'}>
+                            {(drone.risk_score * 100).toFixed(0)}%
+                          </span>
+                        </div>
+                        {drone.near_restricted_zone && (
+                          <p className="text-xs text-amber-600 mt-2 font-bold">⚠ NEAR RESTRICTED ZONE</p>
+                        )}
+                        {drone.predicted_zone_breach && (
+                          <p className="text-xs text-red-600 mt-2 font-bold">🚨 PREDICTED BREACH</p>
+                        )}
+                      </div>
+                    </Popup>
+                  </Marker>
+                )
+              })}
+            </MapContainer>
           </div>
         )}
       </div>
