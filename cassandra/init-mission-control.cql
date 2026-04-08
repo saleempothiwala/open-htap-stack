@@ -83,6 +83,15 @@ CREATE TABLE IF NOT EXISTS demo.alerts_by_bucket (
 ) WITH CLUSTERING ORDER BY (alert_time DESC, entity_id ASC, alert_id DESC);
 
 -- ============================================================
+-- Table 5: ingestion_counts
+-- Purpose: Track ingestion volume in 30-minute buckets for dashboard charts
+-- ============================================================
+CREATE TABLE IF NOT EXISTS demo.ingestion_counts (
+  bucket text PRIMARY KEY,
+  record_count counter
+);
+
+-- ============================================================
 -- Seed Data: Demo Restricted Zones (Oslo, Norway area)
 -- ============================================================
 
@@ -114,28 +123,6 @@ VALUES (
   'zone-fornebu',
   'Fornebu Tech Park',
   'POLYGON((10.62 59.88, 10.66 59.88, 10.66 59.90, 10.62 59.90, 10.62 59.88))',
-  'warning',
-  true,
-  toTimestamp(now())
-);
-
--- Zone 4: Kjeller Airfield (historic airfield, north-east of Oslo)
-INSERT INTO demo.restricted_zones (zone_id, zone_name, polygon_wkt, severity, enabled, updated_at)
-VALUES (
-  'zone-kjeller',
-  'Kjeller Flyplass',
-  'POLYGON((10.98 59.96, 11.02 59.96, 11.02 59.98, 10.98 59.98, 10.98 59.96))',
-  'warning',
-  true,
-  toTimestamp(now())
-);
-
--- Zone 5: Akershus Fortress
-INSERT INTO demo.restricted_zones (zone_id, zone_name, polygon_wkt, severity, enabled, updated_at)
-VALUES (
-  'zone-akershus',
-  'Akershus Festning',
-  'POLYGON((10.73 59.905, 10.745 59.905, 10.745 59.912, 10.73 59.912, 10.73 59.905))',
   'warning',
   true,
   toTimestamp(now())

@@ -5,7 +5,7 @@ from cassandra.cluster import Cluster, Session, ExecutionProfile, EXEC_PROFILE_D
 from cassandra.query import SimpleStatement
 from cassandra.policies import DCAwareRoundRobinPolicy, WhiteListRoundRobinPolicy
 from cassandra.pool import Host
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 
 from app.config import settings
 
@@ -204,6 +204,53 @@ class CassandraClient:
     def get_drones_in_polygon(self, polygon_wkt: str) -> List[Dict[str, Any]]:
         """Get all drones (we'll filter server-side since Cassandra doesn't support ST_Contains natively)."""
         return self.get_flying_drones()
+
+    def get_ingestion_history(self, hours: int = 8) -> List[Dict[str, Any]]:
+        """Get ingestion counts for the last N hours in 30-minute buckets."""
+        now = datetime.now(timezone.utc)
+        num_buckets = hours * 2  # 2 buckets per hour
+        results = []
+
+        for i in range(num_buckets - 1, -1, -1):  # oldest first
+            t = now - timedelta(minutes=30 * i)
+            minute_bucket = 0 if t.minute < 30 else 30
+            bucket_key = f"{t.strftime('%Y-%m-%dT%H')}:{minute_bucket:02d}"
+            display_time = f"{t.strftime('%H')}:{minute_bucket:02d}"
+
+            try:
+                rows = self.execute_query(
+                    "SELECT record_count FROM ingestion_counts WHERE bucket = %s",
+                    (bucket_key,)
+                )
+                count = rows[0]["record_count"] if rows else 0
+            except Exception:
+                count = 0
+
+            results.append({
+                "time": display_time,
+                "timestamp": bucket_key,
+                "count": count or 0,
+            })
+
+        return results
+
+    def get_ingestion_rate(self) -> float:
+        """Get the current ingestion rate in records per second from the last completed 30-min bucket."""
+        now = datetime.now(timezone.utc)
+        # Use the previous completed 30-min bucket
+        t = now - timedelta(minutes=30)
+        minute_bucket = 0 if t.minute < 30 else 30
+        bucket_key = f"{t.strftime('%Y-%m-%dT%H')}:{minute_bucket:02d}"
+
+        try:
+            rows = self.execute_query(
+                "SELECT record_count FROM ingestion_counts WHERE bucket = %s",
+                (bucket_key,)
+            )
+            count = rows[0]["record_count"] if rows else 0
+            return (count or 0) / 1800.0  # 30 min = 1800 seconds
+        except Exception:
+            return 0.0
 
 
 # Singleton instance

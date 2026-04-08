@@ -19,7 +19,7 @@ class OverviewKPIs(BaseModel):
     platform_health_score: float = 1.0
     total_drones: int = 0
     total_events: int = 0
-    ingestion_rate_per_min: int = 0
+    ingestion_rate_per_sec: float = 0.0
     latest_alerts: List["AlertSummary"] = []
 
 
@@ -32,6 +32,12 @@ class OverviewTrends(BaseModel):
     ingestion_per_minute: List[TrendPoint] = []
     error_count_5m: List[TrendPoint] = []
     active_drones_history: List[TrendPoint] = []
+
+
+class IngestionBucket(BaseModel):
+    time: str        # Display time like "06:00"
+    timestamp: str   # Full bucket key like "2026-04-08T06:00"
+    count: int = 0   # Records ingested in this 30-min window
 
 
 # ──────────────────────── Map / Drones ────────────────────────

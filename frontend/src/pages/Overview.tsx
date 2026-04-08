@@ -13,7 +13,7 @@ interface KPIs {
   total_drones: number
   total_events: number
   platform_health_score: number
-  ingestion_rate_per_min: number
+  ingestion_rate_per_sec: number
   latest_alerts: Array<{
     alert_id: string
     alert_time: string
@@ -22,6 +22,14 @@ interface KPIs {
     severity: string
     message: string
     risk_score: number
+  }>
+}
+
+interface IngestionHistory {
+  buckets: Array<{
+    time: string
+    timestamp: string
+    count: number
   }>
 }
 
@@ -60,11 +68,20 @@ function KPICard({ icon, label, value, unit, badge, badgeColor, progress, progre
 }
 
 export default function OverviewPage() {
-  const { data: kpis, isLoading } = useQuery<KPIs>({
+  const { data: kpis, isLoading: kpisLoading } = useQuery<KPIs>({
     queryKey: ['kpis'],
     queryFn: () => fetch('/api/overview/kpis').then((r) => r.json()),
     refetchInterval: 3000,
   })
+
+  const { data: historyData } = useQuery<IngestionHistory>({
+    queryKey: ['ingestion-history'],
+    queryFn: () => fetch('/api/overview/ingestion-history').then((r) => r.json()),
+    refetchInterval: 10000,
+  })
+
+  const history = historyData?.buckets ?? []
+  const maxCount = Math.max(...history.map(h => h.count), 1)
 
   const healthScore = kpis?.platform_health_score ?? 0.98
   const healthPercent = Math.round(healthScore * 100)
@@ -83,7 +100,7 @@ export default function OverviewPage() {
               <span className="font-label text-[0.6875rem] uppercase tracking-[0.2em] text-[#00e2ee] font-bold">The System Pulse</span>
             </div>
             <h1 className="text-4xl lg:text-6xl font-headline font-black tracking-tighter text-[#f1f3fc] mb-6 uppercase">
-              {isLoading ? 'CONNECTING...' : 'SYSTEM PULSE: OPTIMAL'}
+              {kpisLoading ? 'CONNECTING...' : 'SYSTEM PULSE: OPTIMAL'}
             </h1>
             <p className="text-[#a8abb3] max-w-xl text-lg font-light leading-relaxed mb-8">
               All heuristic pipelines are operating within nominal parameters.
@@ -123,11 +140,11 @@ export default function OverviewPage() {
         <KPICard
           icon="database"
           label="Ingestion Rate"
-          value={kpis ? `${(kpis.ingestion_rate_per_min / 60).toFixed(1)}k` : '0'}
+          value={kpis ? (kpis.ingestion_rate_per_sec / 1000).toFixed(1) + 'k' : '0'}
           unit="/sec"
           badge="LIVE"
           badgeColor="text-[#99f7ff]"
-          progress={74}
+          progress={kpis ? Math.min((kpis.ingestion_rate_per_sec / 5000) * 100, 100) : 0}
           progressColor="bg-[#99f7ff]"
         />
         <KPICard
@@ -168,24 +185,36 @@ export default function OverviewPage() {
           <div className="flex justify-between items-center mb-10">
             <div>
               <h3 className="font-headline text-lg font-bold uppercase tracking-wide">Ingestion Volume</h3>
-              <p className="text-[#a8abb3] text-xs font-medium uppercase tracking-[0.1em] mt-1">Real-time throughput metrics</p>
+              <p className="text-[#a8abb3] text-xs font-medium uppercase tracking-[0.1em] mt-1">Real-time throughput metrics (30m buckets)</p>
             </div>
             <div className="flex gap-2">
-              <button className="bg-[#20262f] px-3 py-1 rounded text-[10px] font-bold text-[#99f7ff]">60S</button>
-              <button className="bg-[#151a21] px-3 py-1 rounded text-[10px] font-bold text-[#a8abb3]">5M</button>
-              <button className="bg-[#151a21] px-3 py-1 rounded text-[10px] font-bold text-[#a8abb3]">1H</button>
+              <button className="bg-[#20262f] px-3 py-1 rounded text-[10px] font-bold text-[#99f7ff]">8H</button>
+              <button className="bg-[#151a21] px-3 py-1 rounded text-[10px] font-bold text-[#a8abb3]">24H</button>
             </div>
           </div>
-          <div className="h-64 flex items-end justify-between gap-2">
-            {[40, 55, 70, 65, 85, 45, 30, 92, 60, 50, 75, 100, 65, 45, 35].map((h, i) => (
+          <div className="h-64 flex items-end justify-between gap-1 relative pt-10">
+            {/* Y-axis legends */}
+            <div className="absolute left-0 top-0 text-[10px] font-bold text-[#a8abb3]/40 flex flex-col items-start gap-12 pointer-events-none uppercase tracking-tighter">
+                <span>{(maxCount / 1000).toFixed(0)}k</span>
+                <span>{(maxCount / 2000).toFixed(0)}k</span>
+                <span>0k</span>
+            </div>
+
+            {history.map((h, i) => (
               <div
                 key={i}
-                className="w-full bg-[#99f7ff]/20 hover:bg-[#99f7ff] transition-colors cursor-pointer relative group rounded-sm"
-                style={{ height: `${h}%` }}
+                className="flex-1 bg-[#99f7ff]/20 hover:bg-[#99f7ff] transition-all cursor-pointer relative group rounded-sm"
+                style={{ height: `${Math.max((h.count / maxCount) * 100, 2)}%` }}
               >
-                <div className="absolute -top-6 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 text-[10px] text-[#99f7ff] transition-opacity">
-                  {((h / 100) * 12.4).toFixed(1)}k
+                <div className="absolute -top-6 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 text-[10px] text-[#99f7ff] transition-opacity font-bold whitespace-nowrap">
+                  {(h.count / 1000).toFixed(1)}k
                 </div>
+                {/* X-axis labels (every 4th bucket to avoid crowding) */}
+                {i % 4 === 0 && (
+                  <div className="absolute -bottom-6 left-1/2 -translate-x-1/2 text-[9px] font-bold text-[#a8abb3] whitespace-nowrap opacity-60">
+                    {h.time}
+                  </div>
+                )}
               </div>
             ))}
           </div>

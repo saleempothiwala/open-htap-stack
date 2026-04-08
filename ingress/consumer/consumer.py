@@ -192,6 +192,22 @@ def ensure_schema(session, keyspace: str, table: str):
         """
     )
 
+    # Ingestion statistics counter table (30-minute buckets)
+    session.execute(
+        """
+        CREATE TABLE IF NOT EXISTS demo.ingestion_counts (
+            bucket text PRIMARY KEY,
+            record_count counter
+        );
+        """
+    )
+
+
+def _thirty_min_bucket(dt: datetime) -> str:
+    """Generate a 30-minute bucket key like '2026-04-08T14:00' or '2026-04-08T14:30'."""
+    minute_bucket = 0 if dt.minute < 30 else 30
+    return f"{dt.strftime('%Y-%m-%dT%H')}:{minute_bucket:02d}"
+
 
 # ──────────────────────────────────────────────────────────────
 # Geometry helpers
@@ -606,6 +622,10 @@ def main() -> None:
     )
     upsert_latest.consistency_level = ConsistencyLevel.QUORUM
 
+    update_ingestion_counter = session.prepare(
+        "UPDATE demo.ingestion_counts SET record_count = record_count + ? WHERE bucket = ?"
+    )
+
     # Derived state
     tracker = DroneTracker()
     alert_gen = AlertGenerator(session)
@@ -716,6 +736,10 @@ def main() -> None:
 
         # Commit offsets after successful writes
         consumer.commit()
+        # Update ingestion counter for 30-min bucket
+        if buffered > 0:
+            bucket = _thirty_min_bucket(datetime.now(timezone.utc))
+            session.execute_async(update_ingestion_counter, (buffered, bucket))
         buffered = 0
 
         # Report every 5 seconds

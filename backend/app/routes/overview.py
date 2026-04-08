@@ -3,7 +3,7 @@ from typing import Dict, Any
 from datetime import datetime, timezone
 from fastapi import APIRouter
 
-from app.models import OverviewKPIs, OverviewTrends, TrendPoint, AlertSummary
+from app.models import OverviewKPIs, OverviewTrends, TrendPoint, AlertSummary, IngestionBucket
 from app.db.cassandra_client import cassandra_client
 
 router = APIRouter(prefix="/api/overview", tags=["overview"])
@@ -34,11 +34,36 @@ async def get_overview_trends():
         return OverviewTrends()
 
 
+@router.get("/ingestion-history")
+async def get_ingestion_history():
+    """Get ingestion volume in 30-min buckets over the last 8 hours."""
+    if not cassandra_client.connected:
+        return {"buckets": []}
+    try:
+        history = cassandra_client.get_ingestion_history(hours=8)
+        return {
+            "buckets": [
+                IngestionBucket(
+                    time=h["time"],
+                    timestamp=h["timestamp"],
+                    count=h["count"],
+                ).model_dump()
+                for h in history
+            ]
+        }
+    except Exception as e:
+        print(f"[overview] Error in ingestion-history: {e}")
+        return {"buckets": []}
+
 def _fetch_kpis() -> Dict[str, Any]:
     if not cassandra_client.connected:
         return _empty_kpis()
     try:
         kpis = cassandra_client.get_overview_kpis()
+        try:
+            kpis["ingestion_rate_per_sec"] = cassandra_client.get_ingestion_rate()
+        except Exception:
+            kpis["ingestion_rate_per_sec"] = 0.0
         return _normalize_kpis(kpis)
     except Exception:
         return _empty_kpis()
@@ -79,7 +104,7 @@ def _normalize_kpis(raw: Dict[str, Any]) -> Dict[str, Any]:
         "total_drones": int(raw.get("total_drones", 0)),
         "total_events": int(raw.get("total_events", 0)),
         "platform_health_score": 1.0,
-        "ingestion_rate_per_min": 0,
+        "ingestion_rate_per_sec": float(raw.get("ingestion_rate_per_sec", 0.0)),
     }
 
 

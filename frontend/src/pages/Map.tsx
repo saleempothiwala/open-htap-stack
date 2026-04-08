@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from 'react'
-import { MapContainer, TileLayer, Marker, Popup, Circle, useMap } from 'react-leaflet'
+import { MapContainer, TileLayer, Marker, Popup, Polygon, useMap } from 'react-leaflet'
 import { Icon, LatLngExpression } from 'leaflet'
 import { useQuery } from '@tanstack/react-query'
 
@@ -73,15 +73,9 @@ function parseWktPolygon(wkt: string): LatLngExpression[] {
   return coords
 }
 
-function getZoneColor(severity: string): string {
-  switch (severity) {
-    case 'critical':
-      return '#ff7162'
-    case 'warning':
-      return '#feaa00'
-    default:
-      return '#99f7ff'
-  }
+function getZoneColor(): string {
+  // User requested "polygons with red shaded fill"
+  return '#ff7162'
 }
 
 // Component to invalidate map size after render
@@ -137,7 +131,7 @@ export default function MapPage() {
     })
   })
 
-  const defaultCenter: LatLngExpression = [0, 0]
+  const defaultCenter: LatLngExpression = [59.91, 10.75] // Default to Oslo
   const center = allCoords.length > 0
     ? [
       allCoords.reduce((s, c) => s + c[0], 0) / allCoords.length,
@@ -209,7 +203,7 @@ export default function MapPage() {
           <div className="w-full h-full">
             <MapContainer
               center={center}
-              zoom={2}
+              zoom={11}
               style={{ width: '100%', height: '100%', zIndex: 1 }}
               zoomControl={false}
               ref={mapRef}
@@ -225,18 +219,17 @@ export default function MapPage() {
 
               {/* Restricted Zones */}
               {zones.map((zone) => {
-                const coords = parseWktPolygon(zone.polygon_wkt)
-                if (coords.length === 0) return null
-                const color = getZoneColor(zone.severity)
+                const positions = parseWktPolygon(zone.polygon_wkt)
+                if (positions.length === 0) return null
+                const color = getZoneColor()
                 return (
-                  <Circle
+                  <Polygon
                     key={zone.zone_id}
-                    center={coords[0] as LatLngExpression}
-                    radius={2000}
+                    positions={positions}
                     pathOptions={{
                       color,
                       fillColor: color,
-                      fillOpacity: 0.15,
+                      fillOpacity: 0.25,
                       weight: 2,
                       dashArray: '5, 5',
                     }}
@@ -247,7 +240,7 @@ export default function MapPage() {
                         <p className="text-xs text-gray-600 uppercase">{zone.severity}</p>
                       </div>
                     </Popup>
-                  </Circle>
+                  </Polygon>
                 )
               })}
 
