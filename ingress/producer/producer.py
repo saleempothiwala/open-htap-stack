@@ -139,9 +139,20 @@ class TextSampler:
         if n_sent is None:
             n_sent = int(self._rng.integers(1, 4))  # 1..3
         pos = int(self._rng.integers(0, self._size))
+        return self._extract_stable(pos, n_sent)
+
+    def sample_stable(self, seed: int) -> str:
+        """Sample a few sentences from a deterministic offset based on a seed."""
+        if self._size < 32:
+            return ""
+        local_rng = np.random.default_rng(seed)
+        n_sent = int(local_rng.integers(1, 4))
+        pos = int(local_rng.integers(0, self._size))
+        return self._extract_stable(pos, n_sent)
+
+    def _extract_stable(self, pos: int, n_sent: int) -> str:
         start = self._find_sentence_start(pos)
         txt = self._take_sentences(start, n_sent)
-        # Keep it clean-ish (optional): collapse whitespace
         return " ".join(txt.split())
 
 
@@ -527,7 +538,7 @@ class FleetState:
                 min_s, max_s = text_refresh_range_s
                 idxs = ids[refresh_mask]
                 for idx in idxs.tolist():
-                    self.text_cache[idx] = text_sampler.sample()
+                    self.text_cache[idx] = text_sampler.sample_stable(idx)
                 self.next_text_t[idxs] = now_ts + self.rng.uniform(min_s, max_s, size=idxs.shape[0])
             texts: Sequence[str] = [self.text_cache[i] for i in ids.tolist()]
         else:

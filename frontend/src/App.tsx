@@ -107,7 +107,7 @@ function TopBar() {
 function FloatingStatus() {
   const { data } = useQuery({
     queryKey: ['health'],
-    queryFn: () => fetch('/health').then((r) => r.json()),
+    queryFn: () => fetch('/api/health').then((r) => r.json()),
     refetchInterval: 5000,
   })
 

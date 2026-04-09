@@ -24,8 +24,17 @@ CREATE TABLE IF NOT EXISTS demo.drone_latest_status (
   near_restricted_zone boolean,
   predicted_zone_breach boolean,
   risk_score double,
+  text_payload text,
+  payload_vector vector<float, 1536>,
   updated_at timestamp
 );
+
+-- Ensure columns exist if table was already created
+ALTER TABLE demo.drone_latest_status ADD IF NOT EXISTS text_payload text;
+ALTER TABLE demo.drone_latest_status ADD IF NOT EXISTS payload_vector vector<float, 1536>;
+
+CREATE CUSTOM INDEX IF NOT EXISTS payload_vector_idx ON demo.drone_latest_status (payload_vector) 
+USING 'org.apache.cassandra.index.sai.StorageAttachedIndex';
 
 -- ============================================================
 -- Table 2: drone_events_by_entity
@@ -46,6 +55,7 @@ CREATE TABLE IF NOT EXISTS demo.drone_events_by_entity (
   speed_mps double,
   heading_deg double,
   zone_id text,
+  text_payload text,
   PRIMARY KEY ((entity_id), event_time, event_id)
 ) WITH CLUSTERING ORDER BY (event_time DESC, event_id DESC);
 

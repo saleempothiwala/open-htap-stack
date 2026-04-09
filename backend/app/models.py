@@ -164,7 +164,8 @@ class WhatIfZoneResponse(BaseModel):
 
 class SQLQueryRequest(BaseModel):
     sql: str
-    limit: int = 100
+    limit: int = 10
+    engine: str = "cassandra"
 
 
 class SQLQueryResult(BaseModel):

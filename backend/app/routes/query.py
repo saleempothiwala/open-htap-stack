@@ -22,14 +22,32 @@ async def execute_sql(req: SQLQueryRequest):
     for kw in FORBIDDEN_KEYWORDS:
         if kw in sql.upper():
             raise HTTPException(status_code=400, detail=f"Forbidden keyword: {kw}")
-    if not cassandra_client.connected:
-        raise HTTPException(status_code=503, detail="Database unavailable")
+    from app.db.trino_client import trino_client
+    
+    # Clean up semicolon
+    sql = sql.rstrip(';')
+    
+    if req.engine == "cassandra":
+        if "LIMIT" not in sql.upper():
+            if "ALLOW FILTERING" in sql.upper():
+                sql = re.sub(r"(ALLOW FILTERING)", f"LIMIT {req.limit} \\1", sql, flags=re.IGNORECASE)
+            else:
+                sql = f"{sql} LIMIT {req.limit}"
+        sql = sql + ";"
+        client = cassandra_client
+    else:
+        # Presto/Trino
+        sql = re.sub(r"ALLOW FILTERING", "", sql, flags=re.IGNORECASE)
+        if "LIMIT" not in sql.upper():
+            sql = f"{sql} LIMIT {req.limit}"
+        client = trino_client
 
-    if "LIMIT" not in sql.upper():
-        sql = sql + f" LIMIT {req.limit}"
+    if not client.connected:
+        raise HTTPException(status_code=503, detail=f"{req.engine.capitalize()} engine unavailable")
+
     try:
         start = time.time()
-        rows = cassandra_client.execute_query(sql)
+        rows = client.execute_query(sql)
         columns = list(rows[0].keys()) if rows else []
         data = [list(r.values()) for r in rows]
         return SQLQueryResult(

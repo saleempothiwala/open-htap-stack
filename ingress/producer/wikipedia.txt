@@ -1,0 +1,20 @@
+Unmanned aerial vehicles (UAVs), commonly known as drones, are aircraft without any human pilot, crew, or passengers on board.
+The flight of UAVs may operate under remote control by a human operator, as remotely-piloted aircraft (RPA).
+The first pilotless vehicles were built during or shortly after World War I.
+Modern drones are used for missions ranging from military reconnaissance to commercial delivery.
+Computer vision and artificial intelligence are often integrated into drone flight controllers.
+Drones can be equipped with various sensors including high-resolution cameras, LIDAR, and thermal imaging.
+The Oslo Airport at Gardermoen is a strictly restricted airspace for all unauthorized drone activity.
+Drone racing has become a popular international sport with professional leagues and high-speed FPV viewing.
+Advanced battery technology has significantly increased the flight duration of modern quadcopters.
+Autonomous collision avoidance systems are becoming a standard feature in consumer drones.
+Swarm robotics involving dozens of synchronized drones is a major research area in autonomous systems.
+UAVs are frequently used in search and rescue missions to scout difficult terrain from the air.
+The Royal Palace in Oslo is protected by a permanent no-fly zone to ensure public safety.
+Agricultural drones help farmers monitor crop health through multispectral imaging and precision spraying.
+Environmental scientists use drones to track wildlife migrations and monitor deforestation in remote areas.
+The integration of 5G connectivity allows for ultra-low latency control of drones over long distances.
+Drones are increasingly being used by utility companies to inspect power lines and wind turbines.
+Regulations for drone flight vary significantly between different countries and urban environments.
+Fornebu Tech Park is one of the designated testing grounds for next-generation urban air mobility.
+The use of lightweight carbon fiber materials has improved the structural integrity and efficiency of UAVs.

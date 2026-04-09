@@ -95,6 +95,7 @@ def ensure_schema(session, keyspace: str, table: str):
           near_restricted_zone boolean,
           predicted_zone_breach boolean,
           risk_score double,
+          text_payload text,
           updated_at timestamp
         );
         """
@@ -117,6 +118,7 @@ def ensure_schema(session, keyspace: str, table: str):
           speed_mps double,
           heading_deg double,
           zone_id text,
+          text_payload text,
           PRIMARY KEY ((entity_id), event_time, event_id)
         ) WITH CLUSTERING ORDER BY (event_time DESC, event_id DESC);
         """
@@ -595,8 +597,8 @@ def main() -> None:
         INSERT INTO demo.drone_events_by_entity
             (entity_id, event_time, event_id, event_type, observer_id,
              latitude, longitude, altitude_m, temp_external_c, temp_internal_c,
-             speed_mps, heading_deg, zone_id)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+             speed_mps, heading_deg, zone_id, text_payload)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         """
     )
     insert_drone_event.consistency_level = ConsistencyLevel.QUORUM
@@ -620,6 +622,7 @@ def main() -> None:
             near_restricted_zone = ?,
             predicted_zone_breach = ?,
             risk_score = ?,
+            text_payload = ?,
             updated_at = ?
         WHERE entity_id = ?
         """
@@ -720,7 +723,7 @@ def main() -> None:
                     entity_id, event_time, event_id, event_type, observer_id,
                     latitude, longitude, altitude_m,
                     temp_external_c, temp_internal_c,
-                    speed_mps, heading_deg, nearest_zone_id,
+                    speed_mps, heading_deg, nearest_zone_id, text_payload,
                 ))
 
                 # 5. Upsert drone_latest_status (current state)
@@ -730,7 +733,7 @@ def main() -> None:
                     temp_external_c, temp_internal_c,
                     speed_mps, heading_deg, is_flying,
                     telemetry_age_s, near_zone, predicted_breach,
-                    risk_score, now_utc,
+                    risk_score, text_payload, now_utc,
                     entity_id,
                 ))
 

@@ -131,7 +131,7 @@ services:
     # tips for debugging: check /opt/spark/work/*/*/stderr
 
   presto:
-    image: prestodb/presto:0.296
+    image: trinodb/trino:451
     container_name: presto
     networks: [htap-net]
     depends_on:
@@ -142,7 +142,7 @@ services:
     ports:
       - "8088:8080" # PrestoDB UI
     volumes:
-      - ./presto/etc:/opt/presto-server/etc:ro
+      - ./presto/etc:/etc/trino:ro
       # Placeholder for your custom Sidecar/SSTable connector plugin JAR(s)
       #- ./presto/plugin/sstable:/opt/presto-server/plugin/sstable:rw
 
@@ -161,10 +161,15 @@ services:
         condition: service_healthy
     environment:
       KAFKA_BOOTSTRAP: "kafka:19092"
-      TOPIC: "${DEMO_TOPIC:-demo-events}"
-      EVENTS_PER_SEC: "${DEMO_EVENTS_PER_SEC:-500}"
-      PAYLOAD_BYTES: "${DEMO_PAYLOAD_BYTES:-256}"
+      TOPIC: "demo-events"
+      EVENTS_PER_SEC: "5000"
+      BATCH_PERIOD_MS: "50"
+      TEXT_FILE: "/app/wikipedia.txt"
+      TEXT_REFRESH_MIN_S: "10.0"
+      TEXT_REFRESH_MAX_S: "30.0"
       PRODUCER_CLIENT_ID: "demo-producer"
+    volumes:
+      - ./ingress/producer/wikipedia.txt:/app/wikipedia.txt:ro
     restart: unless-stopped
 
   data-cassandra-sink:
