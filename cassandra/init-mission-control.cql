@@ -103,6 +103,9 @@ CREATE TABLE IF NOT EXISTS demo.ingestion_counts (
 
 -- ============================================================
 -- Seed Data: Demo Restricted Zones (Oslo, Norway area)
+-- Using IF NOT EXISTS so this block is safe to re-run on
+-- container rebuilds without duplicating or overwriting data.
+-- These zones are NEVER cleared by the cleanup-data.sh script.
 -- ============================================================
 
 -- Zone 1: Oslo Airport Gardermoen (critical aviation zone)
@@ -114,7 +117,7 @@ VALUES (
   'critical',
   true,
   toTimestamp(now())
-);
+) IF NOT EXISTS;
 
 -- Zone 2: Royal Palace / Government Quarter
 INSERT INTO demo.restricted_zones (zone_id, zone_name, polygon_wkt, severity, enabled, updated_at)
@@ -125,7 +128,7 @@ VALUES (
   'critical',
   true,
   toTimestamp(now())
-);
+) IF NOT EXISTS;
 
 -- Zone 3: Fornebu / tech park area
 INSERT INTO demo.restricted_zones (zone_id, zone_name, polygon_wkt, severity, enabled, updated_at)
@@ -136,4 +139,4 @@ VALUES (
   'warning',
   true,
   toTimestamp(now())
-);
+) IF NOT EXISTS;

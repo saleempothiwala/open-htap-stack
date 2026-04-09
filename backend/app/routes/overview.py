@@ -35,13 +35,15 @@ async def get_overview_trends():
 
 
 @router.get("/ingestion-history")
-async def get_ingestion_history():
-    """Get ingestion volume in 30-min buckets over the last 8 hours."""
+async def get_ingestion_history(hours: int = 8):
+    """Get ingestion volume in 30-min buckets over the last N hours (8 or 24)."""
+    hours = max(1, min(hours, 48))  # clamp to safe range
     if not cassandra_client.connected:
         return {"buckets": []}
     try:
-        history = cassandra_client.get_ingestion_history(hours=8)
+        history = cassandra_client.get_ingestion_history(hours=hours)
         return {
+            "hours": hours,
             "buckets": [
                 IngestionBucket(
                     time=h["time"],
@@ -54,6 +56,42 @@ async def get_ingestion_history():
     except Exception as e:
         print(f"[overview] Error in ingestion-history: {e}")
         return {"buckets": []}
+
+
+@router.get("/ingestion-history/csv")
+async def download_ingestion_csv(hours: int = 8):
+    """Download ingestion history as CSV for the log export button."""
+    from fastapi.responses import Response
+    hours = max(1, min(hours, 48))
+    if not cassandra_client.connected:
+        return Response(content="time,timestamp,count\n", media_type="text/csv",
+                        headers={"Content-Disposition": "attachment; filename=ingestion_log.csv"})
+    try:
+        history = cassandra_client.get_ingestion_history(hours=hours)
+        lines = ["time,timestamp,count"]
+        for h in history:
+            lines.append(f"{h['time']},{h['timestamp']},{h['count']}")
+        csv_content = "\n".join(lines)
+        return Response(
+            content=csv_content,
+            media_type="text/csv",
+            headers={"Content-Disposition": f"attachment; filename=ingestion_log_{hours}h.csv"},
+        )
+    except Exception as e:
+        return Response(content="time,timestamp,count\n", media_type="text/csv")
+
+
+@router.post("/resync")
+async def trigger_resync():
+    """Re-sync: refresh Cassandra connection state and return current KPIs."""
+    try:
+        if not cassandra_client.connected:
+            cassandra_client.connect()
+        kpis = _fetch_kpis()
+        alerts = _fetch_latest_alerts()
+        return {"success": True, "message": "Re-sync complete", "kpis": kpis, "alert_count": len(alerts)}
+    except Exception as e:
+        return {"success": False, "message": str(e)}
 
 def _fetch_kpis() -> Dict[str, Any]:
     if not cassandra_client.connected:

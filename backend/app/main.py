@@ -58,6 +58,7 @@ def create_app() -> FastAPI:
     from app.routes.health import router as health_router
     from app.routes.vector import router as vector_router
     from app.routes.settings import router as settings_router
+    from app.routes.demo import router as demo_router
 
     app.include_router(overview_router)
     app.include_router(map_router)
@@ -67,6 +68,7 @@ def create_app() -> FastAPI:
     app.include_router(health_router)
     app.include_router(vector_router)
     app.include_router(settings_router)
+    app.include_router(demo_router)
 
     return app
 

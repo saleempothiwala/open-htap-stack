@@ -1,8 +1,9 @@
 """Query routes - SQL and natural language queries."""
 import time
 import re
-from typing import Optional
+from typing import Optional, Any, Dict, List
 from fastapi import APIRouter, HTTPException
+from pydantic import BaseModel
 import httpx
 
 from app.models import SQLQueryRequest, SQLQueryResult, NLQueryRequest, NLQueryResponse
@@ -23,10 +24,10 @@ async def execute_sql(req: SQLQueryRequest):
         if kw in sql.upper():
             raise HTTPException(status_code=400, detail=f"Forbidden keyword: {kw}")
     from app.db.trino_client import trino_client
-    
+
     # Clean up semicolon
     sql = sql.rstrip(';')
-    
+
     if req.engine == "cassandra":
         if "LIMIT" not in sql.upper():
             if "ALLOW FILTERING" in sql.upper():
@@ -37,7 +38,7 @@ async def execute_sql(req: SQLQueryRequest):
         client = cassandra_client
     else:
         # Presto/Trino
-        sql = re.sub(r"ALLOW FILTERING", "", sql, flags=re.IGNORECASE)
+        sql = re.sub(r"\s*ALLOW\s+FILTERING\s*", " ", sql, flags=re.IGNORECASE).strip()
         if "LIMIT" not in sql.upper():
             sql = f"{sql} LIMIT {req.limit}"
         client = trino_client
@@ -48,6 +49,7 @@ async def execute_sql(req: SQLQueryRequest):
     try:
         start = time.time()
         rows = client.execute_query(sql)
+        # ✅ FIX: guard against empty result set before accessing rows[0]
         columns = list(rows[0].keys()) if rows else []
         data = [list(r.values()) for r in rows]
         return SQLQueryResult(
@@ -57,6 +59,106 @@ async def execute_sql(req: SQLQueryRequest):
         )
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+
+# ──────────────────────────────────────────────────────────────
+# HTAP Benchmark — runs one query on BOTH engines simultaneously
+# Always returns HTTP 200 with per-engine result/error so the
+# frontend never crashes on a partial failure (e.g. Presto down)
+# ──────────────────────────────────────────────────────────────
+
+class BenchmarkRequest(BaseModel):
+    sql: str
+    limit: int = 10
+
+
+class EngineResult(BaseModel):
+    columns: List[str] = []
+    rows: List[List[Any]] = []
+    row_count: int = 0
+    query_time_ms: float = 0.0
+    error: Optional[str] = None
+    available: bool = True
+
+
+class BenchmarkResponse(BaseModel):
+    cassandra: EngineResult
+    trino: EngineResult
+
+
+def _sql_for_cassandra(sql: str, limit: int) -> str:
+    """Prepare SQL for Cassandra CQL execution."""
+    sql = sql.strip().rstrip(';')
+    # Ensure table is unqualified or uses demo. prefix — Cassandra uses keyspace.table
+    if "LIMIT" not in sql.upper():
+        if "ALLOW FILTERING" in sql.upper():
+            sql = re.sub(r"(ALLOW FILTERING)", f"LIMIT {limit} \\1", sql, flags=re.IGNORECASE)
+        else:
+            sql = f"{sql} LIMIT {limit}"
+    return sql + ";"
+
+
+def _sql_for_trino(sql: str, limit: int) -> str:
+    """Prepare SQL for Presto/Trino execution."""
+    sql = sql.strip().rstrip(';')
+    # Remove ALLOW FILTERING (Cassandra-only clause)
+    sql = re.sub(r"\s*ALLOW\s+FILTERING\s*", " ", sql, flags=re.IGNORECASE).strip()
+    # Ensure fully-qualified table name (demo.drone_latest_status)
+    # Replace bare table references that aren't already qualified
+    sql = re.sub(
+        r'\b(?<!demo\.)(?<!\.)(drone_latest_status|alerts_by_bucket|ingestion_counts|restricted_zones)\b',
+        r'demo.\1',
+        sql,
+    )
+    if "LIMIT" not in sql.upper():
+        sql = f"{sql} LIMIT {limit}"
+    return sql
+
+
+def _run_engine(client, sql: str) -> EngineResult:
+    """Execute query on a client and return a safe EngineResult."""
+    if not client.connected:
+        return EngineResult(available=False, error="Engine not connected")
+    try:
+        start = time.time()
+        rows = client.execute_query(sql)
+        columns = list(rows[0].keys()) if rows else []
+        data = [list(r.values()) for r in rows]
+        return EngineResult(
+            columns=columns,
+            rows=data,
+            row_count=len(rows),
+            query_time_ms=round((time.time() - start) * 1000, 1),
+        )
+    except Exception as e:
+        return EngineResult(error=str(e))
+
+
+@router.post("/benchmark", response_model=BenchmarkResponse)
+async def run_benchmark(req: BenchmarkRequest):
+    """
+    Run the same logical query on both Cassandra (OLTP) and Presto/Trino (OLAP).
+    Always returns HTTP 200 — per-engine errors are embedded in the response body
+    so the frontend can render both results and errors without crashing.
+    """
+    from app.db.trino_client import trino_client
+
+    sql_upper = req.sql.strip().upper()
+    if not sql_upper.startswith("SELECT"):
+        raise HTTPException(status_code=400, detail="Only SELECT queries are allowed")
+    for kw in FORBIDDEN_KEYWORDS:
+        if kw in sql_upper:
+            raise HTTPException(status_code=400, detail=f"Forbidden keyword: {kw}")
+
+    cass_sql  = _sql_for_cassandra(req.sql, req.limit)
+    trino_sql = _sql_for_trino(req.sql, req.limit)
+
+    cass_result  = _run_engine(cassandra_client, cass_sql)
+    trino_result = _run_engine(trino_client, trino_sql)
+
+    return BenchmarkResponse(cassandra=cass_result, trino=trino_result)
+
+
 
 
 @router.post("/nl", response_model=NLQueryResponse)
