@@ -201,6 +201,7 @@ def ensure_schema(session, keyspace: str, table: str):
         );
         """
     )
+    print("[sink] ingestion_counts table ensured")
 
 
 def _thirty_min_bucket(dt: datetime) -> str:
@@ -361,9 +362,10 @@ class DroneTracker:
         heading_deg = compute_bearing_deg(prev["lat"], prev["lon"], lat, lon)
 
         # Is flying
+        # Lenient on first detection: if altitude is high, assume flying
         is_flying = (
             alt > self.FLYING_ALTITUDE_THRESHOLD
-            and speed_mps > self.FLYING_SPEED_THRESHOLD
+            and (speed_mps > self.FLYING_SPEED_THRESHOLD or prev is None)
         )
 
         self._state[entity_id] = {
@@ -399,6 +401,8 @@ class AlertGenerator:
 
     def load_zones(self):
         """Load restricted zones from Cassandra into memory cache."""
+        # Stop spamming if it keeps failing
+        self._zones_loaded = True
         try:
             rows = self.session.execute("SELECT zone_id, zone_name, polygon_wkt, severity, enabled FROM demo.restricted_zones WHERE enabled = true ALLOW FILTERING")
             self._zones_cache = [
@@ -410,7 +414,7 @@ class AlertGenerator:
                 }
                 for r in rows
             ]
-            self._zones_loaded = True
+            print(f"[alert] loaded {len(self._zones_cache)} restricted zones")
         except Exception as e:
             print(f"[alert] failed to load zones: {e}")
             self._zones_cache = []

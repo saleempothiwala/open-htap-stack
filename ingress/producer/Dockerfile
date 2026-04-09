@@ -13,10 +13,10 @@ RUN rm enwik9.zip
 ENV KAFKA_BOOTSTRAP="kafka:19092"
 ENV TOPIC="demo-events"
 # throughput + cardinality
-ENV EVENTS_PER_SEC=4000
+ENV EVENTS_PER_SEC=5000
 ENV N_ENTITIES=2000
-# batching cadence (2s batches by default)
-ENV BATCH_PERIOD_MS=2000
+# batching cadence (50ms batches for smooth motion)
+ENV BATCH_PERIOD_MS=50
 # optional kafka perf knobs (demo-friendly)
 ENV KAFKA_ACKS=0
 ENV KAFKA_LINGER_MS=20

@@ -102,7 +102,7 @@ export default function MapPage() {
 
   const { data, isLoading } = useQuery<MapLiveData>({
     queryKey: ['map-live'],
-    queryFn: () => fetch('/api/map/live?limit=50').then((r) => r.json()),
+    queryFn: () => fetch('/api/map/live?limit=500').then((r) => r.json()),
     refetchInterval: 5000,
   })
 

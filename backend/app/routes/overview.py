@@ -102,6 +102,7 @@ def _normalize_kpis(raw: Dict[str, Any]) -> Dict[str, Any]:
         "near_zone_count": int(raw.get("near_zone_count", 0)),
         "predicted_breach_count": int(raw.get("predicted_breach_count", 0)),
         "total_drones": int(raw.get("total_drones", 0)),
+        "grounded_drones": int(raw.get("grounded_drones", 0)),
         "total_events": int(raw.get("total_events", 0)),
         "platform_health_score": 1.0,
         "ingestion_rate_per_sec": float(raw.get("ingestion_rate_per_sec", 0.0)),

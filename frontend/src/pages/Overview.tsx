@@ -11,6 +11,7 @@ interface KPIs {
   near_zone_count: number
   predicted_breach_count: number
   total_drones: number
+  grounded_drones: number
   total_events: number
   platform_health_score: number
   ingestion_rate_per_sec: number
@@ -151,8 +152,8 @@ export default function OverviewPage() {
           icon="helicopter"
           label="Active Drones"
           value={kpis ? String(kpis.active_flying_drones) : '0'}
-          unit="units"
-          badge="BUSY"
+          unit={`/ ${kpis?.total_drones || 0}`}
+          badge={kpis ? `${kpis.grounded_drones} GROUNDED` : 'BUSY'}
           badgeColor="text-[#feaa00]"
           progress={kpis ? Math.round((kpis.active_flying_drones / Math.max(kpis.total_drones, 1)) * 100) : 0}
           progressColor="bg-[#99f7ff]"

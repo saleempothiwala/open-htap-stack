@@ -136,7 +136,16 @@ class CassandraClient:
 
         # Total drones
         rows = self.execute_query("SELECT count(*) AS cnt FROM drone_latest_status")
-        kpis["total_drones"] = rows[0]["cnt"] if rows else 0
+        total = rows[0]["cnt"] if rows else 0
+        kpis["total_drones"] = total
+        kpis["grounded_drones"] = total - kpis.get("active_flying_drones", 0)
+
+        # Total events (sum of all ingestion buckets)
+        try:
+            rows = self.execute_query("SELECT record_count FROM ingestion_counts")
+            kpis["total_events"] = sum((r["record_count"] or 0) for r in rows)
+        except Exception:
+            kpis["total_events"] = 0
 
         return kpis
 
@@ -146,7 +155,7 @@ class CassandraClient:
             "SELECT entity_id, event_time, latitude, longitude, altitude_m, "
             "speed_mps, heading_deg, is_flying, temp_internal_c, temp_external_c, "
             "near_restricted_zone, predicted_zone_breach, risk_score "
-            "FROM drone_latest_status"
+            "FROM drone_latest_status LIMIT 500"
         )
 
     def get_flying_drones(self) -> List[Dict[str, Any]]:
@@ -155,7 +164,7 @@ class CassandraClient:
             "SELECT entity_id, event_time, latitude, longitude, altitude_m, "
             "speed_mps, heading_deg, is_flying, temp_internal_c, temp_external_c, "
             "near_restricted_zone, predicted_zone_breach, risk_score "
-            "FROM drone_latest_status WHERE is_flying = true ALLOW FILTERING"
+            "FROM drone_latest_status WHERE is_flying = true ALLOW FILTERING LIMIT 500"
         )
 
     def get_drone_detail(self, entity_id: str) -> Optional[Dict[str, Any]]:
@@ -243,12 +252,32 @@ class CassandraClient:
         bucket_key = f"{t.strftime('%Y-%m-%dT%H')}:{minute_bucket:02d}"
 
         try:
+            # Check current bucket first
+            minute_bucket = 0 if now.minute < 30 else 30
+            bucket_key = f"{now.strftime('%Y-%m-%dT%H')}:{minute_bucket:02d}"
             rows = self.execute_query(
                 "SELECT record_count FROM ingestion_counts WHERE bucket = %s",
                 (bucket_key,)
             )
             count = rows[0]["record_count"] if rows else 0
-            return (count or 0) / 1800.0  # 30 min = 1800 seconds
+            
+            # If current bucket is small, check the previous one too
+            if count < 100:
+                t = now - timedelta(minutes=30)
+                minute_bucket = 0 if t.minute < 30 else 30
+                bucket_key = f"{t.strftime('%Y-%m-%dT%H')}:{minute_bucket:02d}"
+                rows = self.execute_query(
+                    "SELECT record_count FROM ingestion_counts WHERE bucket = %s",
+                    (bucket_key,)
+                )
+                prev_count = rows[0]["record_count"] if rows else 0
+                return (prev_count or 0) / 1800.0
+            
+            # Estimate rate based on elapsed time in current bucket
+            elapsed_sec = (now.minute % 30) * 60 + now.second
+            if elapsed_sec > 10:
+                return count / elapsed_sec
+            return 0.0
         except Exception:
             return 0.0
 

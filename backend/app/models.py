@@ -18,6 +18,7 @@ class OverviewKPIs(BaseModel):
     predicted_breach_count: int = 0
     platform_health_score: float = 1.0
     total_drones: int = 0
+    grounded_drones: int = 0
     total_events: int = 0
     ingestion_rate_per_sec: float = 0.0
     latest_alerts: List["AlertSummary"] = []
