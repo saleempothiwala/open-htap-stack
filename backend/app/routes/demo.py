@@ -106,15 +106,16 @@ async def get_latency_metrics():
     Return real measured latencies for the three HTAP tiers:
     - cassandra_write_ms  (OLTP / ingest)
     - trino_query_ms      (OLAP / analytical)
-    - vector_search_ms    (AI / semantic)
+    - vector_search_ms    (AI / ANN semantic search)
     """
     cassandra_ms = _measure_cassandra_read()
-    trino_ms = _measure_trino_query()
+    trino_ms     = _measure_trino_query()
+    vector_ms    = _measure_vector_search()
 
     return {
         "cassandra_write_ms": cassandra_ms,
-        "trino_query_ms": trino_ms,
-        "vector_search_ms": None,   # filled by the vector route at search time
+        "trino_query_ms":     trino_ms,
+        "vector_search_ms":   vector_ms,
         "timestamp": datetime.now(timezone.utc).isoformat(),
     }
 
@@ -140,6 +141,29 @@ def _measure_trino_query() -> Optional[float]:
         )
         return round((time.perf_counter() - t0) * 1000, 1)
     except Exception:
+        return None
+
+
+def _measure_vector_search() -> Optional[float]:
+    """Time a real ANN probe against Cassandra SAI.
+    Returns None if the payload_vector column is not yet indexed
+    (user must click 'AI Sync Data' first to build the index).
+    """
+    if not cassandra_client.connected:
+        return None
+    try:
+        import numpy as np
+        # Deterministic probe vector — cheap, just measures SAI index latency
+        probe = [0.1] * 1536
+        t0 = time.perf_counter()
+        cassandra_client.execute_query(
+            "SELECT entity_id FROM drone_latest_status "
+            "ORDER BY payload_vector ANN OF %s LIMIT 1",
+            (probe,),
+        )
+        return round((time.perf_counter() - t0) * 1000, 1)
+    except Exception as e:
+        # Return None if column/index absent — TopBar shows "—" which is correct
         return None
 
 

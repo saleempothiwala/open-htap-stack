@@ -29,12 +29,10 @@ async def execute_sql(req: SQLQueryRequest):
     sql = sql.rstrip(';')
 
     if req.engine == "cassandra":
-        if "LIMIT" not in sql.upper():
-            if "ALLOW FILTERING" in sql.upper():
-                sql = re.sub(r"(ALLOW FILTERING)", f"LIMIT {req.limit} \\1", sql, flags=re.IGNORECASE)
-            else:
-                sql = f"{sql} LIMIT {req.limit}"
-        sql = sql + ";"
+        # CQL order: LIMIT must come before ALLOW FILTERING
+        sql = re.sub(r"\s*ALLOW\s+FILTERING\s*", " ", sql, flags=re.IGNORECASE).strip()
+        sql = re.sub(r"\s+LIMIT\s+\d+", "", sql, flags=re.IGNORECASE).strip()
+        sql = f"{sql} LIMIT {req.limit} ALLOW FILTERING;"
         client = cassandra_client
     else:
         # Presto/Trino
@@ -87,15 +85,18 @@ class BenchmarkResponse(BaseModel):
 
 
 def _sql_for_cassandra(sql: str, limit: int) -> str:
-    """Prepare SQL for Cassandra CQL execution."""
+    """Prepare SQL for Cassandra CQL execution.
+
+    CQL requires:  SELECT ... WHERE ... LIMIT N ALLOW FILTERING
+    We strip both clauses and re-append them in the correct order.
+    """
     sql = sql.strip().rstrip(';')
-    # Ensure table is unqualified or uses demo. prefix — Cassandra uses keyspace.table
-    if "LIMIT" not in sql.upper():
-        if "ALLOW FILTERING" in sql.upper():
-            sql = re.sub(r"(ALLOW FILTERING)", f"LIMIT {limit} \\1", sql, flags=re.IGNORECASE)
-        else:
-            sql = f"{sql} LIMIT {limit}"
-    return sql + ";"
+    # Remove any existing ALLOW FILTERING
+    sql = re.sub(r"\s*ALLOW\s+FILTERING\s*", " ", sql, flags=re.IGNORECASE).strip()
+    # Remove any existing LIMIT clause (we'll re-append the canonical one)
+    sql = re.sub(r"\s+LIMIT\s+\d+", "", sql, flags=re.IGNORECASE).strip()
+    # Re-append in the only valid CQL order: LIMIT <n> ALLOW FILTERING
+    return f"{sql} LIMIT {limit} ALLOW FILTERING;"
 
 
 def _sql_for_trino(sql: str, limit: int) -> str:

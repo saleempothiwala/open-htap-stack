@@ -396,17 +396,28 @@ class AlertGenerator:
     WARNING_DISTANCE_M = 500.0   # warn when within this distance of a zone
     BREACH_BUFFER_M = 100.0      # treat as near-zone breach buffer
 
+    # Alert cooldown: (entity_id, zone_id) -> last_alert_epoch_s
+    # Prevents spamming one alert per Kafka message for the same drone/zone pair.
+    ALERT_COOLDOWN_S = 60  # minimum seconds between alerts for same drone+zone
+
     def __init__(self, session):
         self.session = session
         self._zones_cache: list = []
         self._zones_loaded = False
+        self._last_alert: Dict[Tuple[str, str], float] = {}  # cooldown tracker
 
     def load_zones(self):
-        """Load restricted zones from Cassandra into memory cache."""
-        # Stop spamming if it keeps failing
+        """Load restricted zones from Cassandra into memory cache.
+
+        Does a full table scan (no ALLOW FILTERING) and filters enabled=True
+        in Python. The restricted_zones table is tiny so this is essentially free.
+        """
         self._zones_loaded = True
         try:
-            rows = self.session.execute("SELECT zone_id, zone_name, polygon_wkt, severity, enabled FROM demo.restricted_zones WHERE enabled = true ALLOW FILTERING")
+            rows = self.session.execute(
+                "SELECT zone_id, zone_name, polygon_wkt, severity, enabled "
+                "FROM demo.restricted_zones"
+            )
             self._zones_cache = [
                 {
                     "zone_id": r.zone_id,
@@ -415,6 +426,7 @@ class AlertGenerator:
                     "severity": r.severity,
                 }
                 for r in rows
+                if r.enabled  # filter in Python — no index needed
             ]
             print(f"[alert] loaded {len(self._zones_cache)} restricted zones")
         except Exception as e:
@@ -457,18 +469,19 @@ class AlertGenerator:
                 risk_score = max(risk_score, 0.95)
                 nearest_zone_id = zone["zone_id"]
 
-                self._create_alert(
-                    entity_id=entity_id,
-                    alert_time=alert_time,
-                    alert_type="zone_breach",
-                    severity="critical",
-                    zone_id=zone["zone_id"],
-                    lat=lat,
-                    lon=lon,
-                    alt=alt,
-                    message=f"Drone {entity_id} inside restricted zone: {zone['zone_name']}",
-                    risk_score=0.95,
-                )
+                if self._cooldown_ok(entity_id, zone["zone_id"]):
+                    self._create_alert(
+                        entity_id=entity_id,
+                        alert_time=alert_time,
+                        alert_type="zone_breach",
+                        severity="critical",
+                        zone_id=zone["zone_id"],
+                        lat=lat,
+                        lon=lon,
+                        alt=alt,
+                        message=f"Drone {entity_id} INSIDE restricted zone: {zone['zone_name']} — immediate action required",
+                        risk_score=0.95,
+                    )
 
             elif dist < self.WARNING_DISTANCE_M:
                 near_zone = True
@@ -480,8 +493,8 @@ class AlertGenerator:
                 if zone_risk > 0.7:
                     predicted_breach = True
 
-                # Create warning alert only for first detection (avoid spam)
-                if zone_risk > 0.5:
+                # Only alert if risk is significant AND cooldown has elapsed
+                if zone_risk > 0.5 and self._cooldown_ok(entity_id, zone["zone_id"]):
                     self._create_alert(
                         entity_id=entity_id,
                         alert_time=alert_time,
@@ -491,11 +504,21 @@ class AlertGenerator:
                         lat=lat,
                         lon=lon,
                         alt=alt,
-                        message=f"Drone {entity_id} near restricted zone: {zone['zone_name']} ({dist:.0f}m)",
+                        message=f"Drone {entity_id} near restricted zone: {zone['zone_name']} ({dist:.0f}m away)",
                         risk_score=zone_risk,
                     )
 
         return (near_zone, predicted_breach, risk_score, nearest_zone_id)
+
+    def _cooldown_ok(self, entity_id: str, zone_id: str) -> bool:
+        """Returns True if enough time has passed since the last alert for this drone+zone pair."""
+        key = (entity_id, zone_id)
+        now = time.time()
+        last = self._last_alert.get(key, 0.0)
+        if now - last >= self.ALERT_COOLDOWN_S:
+            self._last_alert[key] = now
+            return True
+        return False
 
     def _bucket_for_time(self, alert_time: datetime) -> str:
         """Hourly bucket string like 2024-01-15T14."""

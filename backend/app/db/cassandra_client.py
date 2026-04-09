@@ -180,12 +180,57 @@ class CassandraClient:
         return rows[0] if rows else None
 
     def get_zones(self) -> List[Dict[str, Any]]:
-        """Get all enabled restricted zones."""
+        """Get all enabled restricted zones.
+        
+        Fetches all zone rows and filters enabled=True in Python to avoid
+        requiring an SAI or secondary index on the `enabled` boolean column.
+        The restricted_zones table is tiny (< 100 rows) so a full scan is free.
+        Also re-seeds any missing zones so the map always shows polygons.
+        """
         rows = self.execute_query(
             "SELECT zone_id, zone_name, polygon_wkt, severity, enabled "
-            "FROM restricted_zones WHERE enabled = true ALLOW FILTERING"
+            "FROM restricted_zones"
         )
-        return rows
+        # If table is empty, transparently re-seed the demo zones
+        if not rows:
+            self._seed_restricted_zones()
+            rows = self.execute_query(
+                "SELECT zone_id, zone_name, polygon_wkt, severity, enabled "
+                "FROM restricted_zones"
+            )
+        return [r for r in rows if r.get("enabled", True)]
+
+    def _seed_restricted_zones(self):
+        """Insert the three Oslo demo zones if the table is empty."""
+        zones = [
+            (
+                "zone-oslo-airport", "Oslo Lufthavn Gardermoen",
+                "POLYGON((11.05 60.18, 11.15 60.18, 11.15 60.22, 11.05 60.22, 11.05 60.18))",
+                "critical", True,
+            ),
+            (
+                "zone-royal-palace", "Det Kongelige Slott",
+                "POLYGON((10.72 59.91, 10.74 59.91, 10.74 59.92, 10.72 59.92, 10.72 59.91))",
+                "critical", True,
+            ),
+            (
+                "zone-fornebu", "Fornebu Tech Park",
+                "POLYGON((10.62 59.88, 10.66 59.88, 10.66 59.90, 10.62 59.90, 10.62 59.88))",
+                "warning", True,
+            ),
+        ]
+        from datetime import datetime, timezone
+        now = datetime.now(timezone.utc)
+        for zone_id, name, wkt, severity, enabled in zones:
+            try:
+                self.execute_query(
+                    "INSERT INTO restricted_zones "
+                    "(zone_id, zone_name, polygon_wkt, severity, enabled, updated_at) "
+                    "VALUES (%s, %s, %s, %s, %s, %s) IF NOT EXISTS",
+                    (zone_id, name, wkt, severity, enabled, now),
+                )
+            except Exception as e:
+                print(f"[db] zone seed error ({zone_id}): {e}")
 
     def get_alerts(self, limit: int = 50) -> List[Dict[str, Any]]:
         """Get recent alerts across all buckets."""
