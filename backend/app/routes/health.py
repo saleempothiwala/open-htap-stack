@@ -3,16 +3,17 @@ import socket
 from typing import Dict, Any, List
 from fastapi import APIRouter
 
+from app.config import settings
 from app.models import ServiceHealth, PlatformHealthResponse
 from app.db.cassandra_client import cassandra_client
 
 router = APIRouter(prefix="/api/platform", tags=["platform"])
 
 SERVICE_CHECKS = [
-    ("Cassandra", "cassandra", 9042),
-    ("Kafka", "kafka", 9092),
-    ("Presto/Trino", "presto", 8080),
-    ("Spark", "spark", 8080),
+    ("Cassandra", settings.cassandra_host, settings.cassandra_port),
+    ("Kafka", "localhost", 9092),
+    ("Presto/Trino", settings.trino_host, settings.trino_port),
+    ("Spark", "localhost", 8080),
 ]
 
 

@@ -61,9 +61,9 @@ run_cql() {
   local cql="$1"
   # Try podman exec first (preferred — avoids needing local cqlsh install)
   if podman ps --format '{{.Names}}' 2>/dev/null | grep -q "^${CASSANDRA_CONTAINER}$"; then
-    podman exec -i "$CASSANDRA_CONTAINER" cqlsh "$CASSANDRA_HOST" "$CASSANDRA_PORT" -e "$cql"
+    podman exec -i "$CASSANDRA_CONTAINER" cqlsh "$CASSANDRA_CONTAINER" "$CASSANDRA_PORT" -e "$cql"
   elif docker ps --format '{{.Names}}' 2>/dev/null | grep -q "^${CASSANDRA_CONTAINER}$"; then
-    docker exec -i "$CASSANDRA_CONTAINER" cqlsh "$CASSANDRA_HOST" "$CASSANDRA_PORT" -e "$cql"
+    docker exec -i "$CASSANDRA_CONTAINER" cqlsh "$CASSANDRA_CONTAINER" "$CASSANDRA_PORT" -e "$cql"
   elif command -v cqlsh &>/dev/null; then
     cqlsh "$CASSANDRA_HOST" "$CASSANDRA_PORT" -e "$cql"
   else
@@ -83,12 +83,7 @@ echo "  Producers stopped (or not running — that's fine)"
 echo ""
 echo "[2/3] Truncating generated drone event data..."
 
-TRUNCATE_CQL="
-TRUNCATE demo.drone_latest_status;
-TRUNCATE demo.drone_events_by_entity;
-TRUNCATE demo.alerts_by_bucket;
-TRUNCATE demo.ingestion_counts;
-"
+TRUNCATE_CQL="TRUNCATE demo.drone_latest_status; TRUNCATE demo.drone_events_by_entity; TRUNCATE demo.alerts_by_bucket; TRUNCATE demo.ingestion_counts;"
 
 run_cql "$TRUNCATE_CQL"
 echo "  ✓ drone_latest_status   — cleared"

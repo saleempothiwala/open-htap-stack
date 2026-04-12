@@ -1,0 +1,4 @@
+
+[2026-04-10T12:40:17.460178] Attempting connection to localhost:9042
+Cluster object created. Connecting to 'demo'...
+Success! Connected.

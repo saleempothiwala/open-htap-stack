@@ -42,7 +42,10 @@ async def execute_sql(req: SQLQueryRequest):
         client = trino_client
 
     if not client.connected:
-        raise HTTPException(status_code=503, detail=f"{req.engine.capitalize()} engine unavailable")
+        try:
+            client.connect()
+        except Exception:
+            raise HTTPException(status_code=503, detail=f"{req.engine.capitalize()} engine unavailable")
 
     try:
         start = time.time()

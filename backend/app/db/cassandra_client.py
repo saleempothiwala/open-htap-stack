@@ -25,42 +25,60 @@ class CassandraClient:
         self._cluster: Optional[Cluster] = None
         self._session: Optional[Session] = None
         self.connected = False
+        self._last_connect_attempt = 0
+        self._connect_timeout = 60  # seconds between forced retries if failed
 
-    def connect(self):
+    def connect(self, force=False):
         """Establish connection to Cassandra."""
-        if self.connected:
+        if self.connected and not force:
             return
 
-        retries = 0
-        max_retries = 30
-        while retries < max_retries:
+        # Throttle connection attempts
+        now = time.time()
+        if not force and not self.connected and (now - self._last_connect_attempt < 10): # retry every 10s if requested
+            return
+
+        self._last_connect_attempt = now
+        log_file = "/Users/saleem/projects/open-htap-stack/cassandra_debug.log"
+        
+        with open(log_file, "a") as f:
+            f.write(f"\n[{datetime.now().isoformat()}] Attempting connection to {settings.cassandra_host}:{settings.cassandra_port}\n")
             try:
-                # Use address translator to map container IPs to localhost
-                # This is critical when running locally against containerized Cassandra
-                translator = LocalhostAddressTranslator()
-                lb_policy = WhiteListRoundRobinPolicy(["127.0.0.1"])
+                # Address translator should return the input if it's already an IP we like, 
+                # or map container IPs to localhost.
+                class SimpleTranslator:
+                    def translate(self, addr):
+                        return "127.0.0.1"
+                
+                lb_policy = WhiteListRoundRobinPolicy(["127.0.0.1", "localhost"])
                 
                 profile = ExecutionProfile(
                     load_balancing_policy=lb_policy,
+                    request_timeout=10,
                 )
                 
                 self._cluster = Cluster(
-                    contact_points=["127.0.0.1"],
+                    contact_points=[settings.cassandra_host],
                     port=settings.cassandra_port,
-                    address_translator=translator,
+                    address_translator=SimpleTranslator(),
                     execution_profiles={EXEC_PROFILE_DEFAULT: profile},
                     protocol_version=4,
                 )
+                
+                f.write(f"Cluster object created. Connecting to '{settings.cassandra_keyspace}'...\n")
                 self._session = self._cluster.connect(settings.cassandra_keyspace)
                 self.connected = True
-                print(f"[db] Connected to Cassandra: 127.0.0.1:{settings.cassandra_port}")
-                return
+                f.write("Success! Connected.\n")
+                print(f"[db] Connected to Cassandra: {settings.cassandra_host}")
+                
             except Exception as e:
-                retries += 1
-                print(f"[db] Cassandra not ready yet (attempt {retries}/{max_retries}): {e}")
-                time.sleep(2)
-
-        raise RuntimeError(f"Could not connect to Cassandra after {max_retries} attempts")
+                self.connected = False
+                f.write(f"Connection failed: {str(e)}\n")
+                import traceback
+                f.write(traceback.format_exc())
+                print(f"[db] Cassandra connection failed: {e}")
+                if force:
+                    raise e
 
     def execute_query(self, cql: str, params: tuple = ()) -> List[Dict[str, Any]]:
         """Execute a CQL query and return results as list of dicts."""
