@@ -1,5 +1,6 @@
 # Cassandra data
 cassandra-data/
+cassandra_debug.log
 
 # Spark Ivy cache - ignore all cache data
 spark/ivy/cache/
