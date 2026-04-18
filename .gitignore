@@ -37,3 +37,6 @@ Thumbs.db
 .env
 .env.local
 .env.*.local
+
+# Runtime settings cache (written by backend, read by producer via bind-mount)
+settings-cache/*.json

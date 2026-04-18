@@ -163,13 +163,19 @@ services:
       KAFKA_BOOTSTRAP: "kafka:19092"
       TOPIC: "demo-events"
       EVENTS_PER_SEC: "5000"
+      N_ENTITIES: "100"
       BATCH_PERIOD_MS: "50"
       TEXT_FILE: "/app/wikipedia.txt"
       TEXT_REFRESH_MIN_S: "10.0"
       TEXT_REFRESH_MAX_S: "30.0"
       PRODUCER_CLIENT_ID: "demo-producer"
+      # Settings file written by the backend, polled every 10s by this container.
+      # Uses a bind-mount — no network calls needed, works regardless of topology.
+      SETTINGS_FILE: "/app/settings-cache/demo-settings.json"
+      SETTINGS_POLL_INTERVAL_S: "10"
     volumes:
       - ./ingress/producer/wikipedia.txt:/app/wikipedia.txt:ro
+      - ./settings-cache:/app/settings-cache:ro
     restart: unless-stopped
 
   data-cassandra-sink:

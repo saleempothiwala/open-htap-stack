@@ -52,27 +52,31 @@ export default function SettingsPage() {
   const queryClient = useQueryClient()
   const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null)
   const [scenarioRunning, setScenarioRunning] = useState(false)
-  const initialized = useRef(false)
 
   const [settings, setSettings] = useState<DemoSettings>({
     drones_enabled: 100,
-    events_per_sec: 500,
+    events_per_sec: 5000,
     outlier_percent: 5.0,
     inject_breach_alerts: false,
     replay_mode: false,
     replay_minutes: 10,
   })
 
+  // Only load from server once on first mount — prevents the refetch poll
+  // from overwriting slider values while the user is editing them.
+  const serverLoaded = useRef(false)
+
   const { data } = useQuery({
     queryKey: ['demo-settings'],
     queryFn: () => fetch('/api/settings/demo').then((r) => r.json()),
   })
 
-  // ✅ FIX: Use useEffect + ref guard to avoid infinite render loop
+  // Sync from server once: whichever data arrives first wins (pod startup values).
+  // After that, local form state is authoritative until the user clicks Save.
   useEffect(() => {
-    if (data?.settings && !initialized.current) {
+    if (data?.settings && !serverLoaded.current) {
       setSettings(data.settings)
-      initialized.current = true
+      serverLoaded.current = true
     }
   }, [data])
 
@@ -88,9 +92,36 @@ export default function SettingsPage() {
     },
     onSuccess: () => {
       setToast({ message: 'Settings saved successfully', type: 'success' })
+      serverLoaded.current = false   // allow next refetch to confirm saved value
       queryClient.invalidateQueries({ queryKey: ['demo-settings'] })
     },
     onError: () => setToast({ message: 'Failed to save settings', type: 'error' }),
+  })
+
+  const resetMutation = useMutation({
+    mutationFn: async () => {
+      const r = await fetch('/api/settings/demo/defaults')
+      if (!r.ok) throw new Error('Failed to fetch defaults')
+      return r.json()
+    },
+    onSuccess: (data) => {
+      if (data?.settings) setSettings(data.settings)
+      setToast({ message: 'Reset to pod defaults — click Save to apply', type: 'success' })
+    },
+    onError: () => setToast({ message: 'Could not load defaults', type: 'error' }),
+  })
+
+  const cleanupMutation = useMutation({
+    mutationFn: async () => {
+      const r = await fetch('/api/settings/demo/cleanup', { method: 'POST' })
+      return r.json()
+    },
+    onSuccess: (data) => {
+      setToast({ message: data.message || 'Stale data cleared', type: 'success' })
+      queryClient.invalidateQueries({ queryKey: ['kpis'] })
+      queryClient.invalidateQueries({ queryKey: ['map-live'] })
+    },
+    onError: () => setToast({ message: 'Cleanup failed', type: 'error' }),
   })
 
   const injectMutation = useMutation({
@@ -240,6 +271,31 @@ export default function SettingsPage() {
                 <><MaterialIcon name="sync" className="animate-spin text-[16px]" /> Injecting...</>
               ) : (
                 <><MaterialIcon name="warning" className="text-[16px]" /> INJECT DEMO ALERT</>
+              )}
+            </button>
+
+            <button
+              onClick={() => resetMutation.mutate()}
+              disabled={resetMutation.isPending}
+              className="w-full bg-[#20262f] hover:bg-[#20262f]/80 border border-[#99f7ff]/20 text-[#99f7ff]/60 hover:text-[#99f7ff] px-6 py-3 font-headline font-bold tracking-wider transition-all cursor-pointer active:scale-95 rounded flex items-center justify-center gap-2"
+            >
+              {resetMutation.isPending ? (
+                <><MaterialIcon name="sync" className="animate-spin text-[16px]" /> Loading Defaults...</>
+              ) : (
+                <><MaterialIcon name="restart_alt" className="text-[16px]" /> RESET TO POD DEFAULTS</>
+              )}
+            </button>
+
+            <button
+              onClick={() => cleanupMutation.mutate()}
+              disabled={cleanupMutation.isPending}
+              title="Removes stale drone rows in Cassandra left over from a previous higher drone-count run"
+              className="w-full bg-[#ff7162]/10 hover:bg-[#ff7162]/20 border border-[#ff7162]/30 text-[#ff7162]/70 hover:text-[#ff7162] px-6 py-3 font-headline font-bold tracking-wider transition-all cursor-pointer active:scale-95 rounded flex items-center justify-center gap-2"
+            >
+              {cleanupMutation.isPending ? (
+                <><MaterialIcon name="sync" className="animate-spin text-[16px]" /> Clearing...</>
+              ) : (
+                <><MaterialIcon name="delete_sweep" className="text-[16px]" /> CLEAR STALE DRONE DATA</>
               )}
             </button>
 

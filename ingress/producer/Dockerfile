@@ -14,7 +14,8 @@ ENV KAFKA_BOOTSTRAP="kafka:19092"
 ENV TOPIC="demo-events"
 # throughput + cardinality
 ENV EVENTS_PER_SEC=5000
-ENV N_ENTITIES=2000
+ENV N_ENTITIES=100
+ENV MAX_ENTITIES=1000
 # batching cadence (50ms batches for smooth motion)
 ENV BATCH_PERIOD_MS=50
 # optional kafka perf knobs (demo-friendly)
@@ -26,6 +27,10 @@ ENV KAFKA_COMPRESSION=lz4
 ENV TEXT_FILE="/app/enwik9"
 ENV TEXT_REFRESH_MIN_S=5
 ENV TEXT_REFRESH_MAX_S=30
+# live settings API — set by compose so the producer polls for UI changes
+# Leave blank to disable polling (fixed env-var mode)
+ENV SETTINGS_API_URL=""
+ENV SETTINGS_POLL_INTERVAL_S=10
 ##########################################################
 
 COPY producer.py /app/producer.py

@@ -317,7 +317,7 @@ class DroneTracker:
     """In-memory state tracker for deriving fields from sequential events."""
 
     FLYING_ALTITUDE_THRESHOLD = 10.0   # meters
-    FLYING_SPEED_THRESHOLD = 1.0       # m/s
+    FLYING_SPEED_THRESHOLD = 0.1       # m/s — lowered: with sparse updates (long dt), slow movers still count as flying
     STALE_TELEMETRY_SECONDS = 30
 
     def __init__(self):
@@ -363,12 +363,10 @@ class DroneTracker:
         # Heading
         heading_deg = compute_bearing_deg(prev["lat"], prev["lon"], lat, lon)
 
-        # Is flying
-        # Lenient on first detection: if altitude is high, assume flying
-        is_flying = (
-            alt > self.FLYING_ALTITUDE_THRESHOLD
-            and (speed_mps > self.FLYING_SPEED_THRESHOLD or prev is None)
-        )
+        # Is flying: altitude-only check.
+        # Speed-based detection is unreliable with variable event dt,
+        # and all simulated drones fly at 30-200m altitude.
+        is_flying = alt > self.FLYING_ALTITUDE_THRESHOLD
 
         self._state[entity_id] = {
             "lat": lat,

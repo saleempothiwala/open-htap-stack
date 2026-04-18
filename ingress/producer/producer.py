@@ -15,6 +15,7 @@ import os
 import time
 import math
 import uuid
+import threading
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from typing import Optional, List, Sequence, Tuple
@@ -559,13 +560,58 @@ def _dumps(obj: dict) -> bytes:
     return json.dumps(obj, separators=(",", ":"), ensure_ascii=False).encode("utf-8")
 
 
+# ------------------------------------
+# Live settings (polled from shared file)
+# ------------------------------------
+
+def _poll_settings(settings_file: str, state: dict, stop: threading.Event, interval_s: float) -> None:
+    """Background thread: poll a JSON settings file written by the backend
+    and update shared state. No network calls — works via bind-mount."""
+    import json as _json
+    path = __import__("pathlib").Path(settings_file)
+    while not stop.wait(interval_s):
+        try:
+            if not path.exists():
+                # File absent = use env-var defaults (pod restart behaviour)
+                continue
+            data = _json.loads(path.read_text())
+            new_eps = int(data.get("events_per_sec", state["eps"]))
+            new_n = int(data.get("drones_enabled", state["n_entities"]))
+            if new_eps != state["eps"] or new_n != state["n_entities"]:
+                print(
+                    f"[producer] settings updated from file — "
+                    f"eps: {state['eps']} → {new_eps}, "
+                    f"n_entities: {state['n_entities']} → {new_n}"
+                )
+            state["eps"] = new_eps
+            state["n_entities"] = new_n
+        except Exception as e:
+            print(f"[producer] settings file poll error (using current values): {e}")
+
+
 def main() -> None:
     bootstrap = env_str("KAFKA_BOOTSTRAP", "kafka:19092")
     topic = env_str("TOPIC", "demo-events")
 
     # mbp m3 handles up to ~11k/s
-    eps = max(1, env_int("EVENTS_PER_SEC", 2000))
-    n_entities = max(1, env_int("N_ENTITIES", 5000))
+    eps = max(1, env_int("EVENTS_PER_SEC", 5000))
+    n_entities = max(1, env_int("N_ENTITIES", 100))
+
+    # Shared mutable settings — updated by the polling thread
+    live = {"eps": eps, "n_entities": n_entities}
+
+    # Optional settings file polling (written by backend, mounted via compose)
+    settings_file = os.getenv("SETTINGS_FILE", "/app/settings-cache/demo-settings.json")
+    poll_interval = env_float("SETTINGS_POLL_INTERVAL_S", 10.0)
+    _stop_poll = threading.Event()
+    t = threading.Thread(
+        target=_poll_settings,
+        args=(settings_file, live, _stop_poll, poll_interval),
+        daemon=True,
+        name="settings-poller",
+    )
+    t.start()
+    print(f"[producer] settings file polling enabled: {settings_file} (every {poll_interval}s)")
 
     # send loop cadence (lower => lower latency; higher => fewer wakeups)
     period_ms = max(5, env_int("BATCH_PERIOD_MS", 50))
@@ -600,10 +646,11 @@ def main() -> None:
     text_refresh_min = env_float("TEXT_REFRESH_MIN_S", 5.0)
     text_refresh_max = env_float("TEXT_REFRESH_MAX_S", 30.0)
 
-    fleet = FleetState(FleetConfig(n_entities=n_entities, seed=env_int("FLEET_SEED", 42)))
-
-    # Precompute entity identifiers/keys (saves per-event string formatting at high EPS)
-    entity_ids = [f"asset-{i:06d}" for i in range(n_entities)]
+    # Pre-allocate entity identifiers/keys for the maximum fleet size the UI allows.
+    # This means live n_entities changes won't cause index-out-of-range errors.
+    max_entities = max(n_entities, env_int("MAX_ENTITIES", 1000))
+    fleet = FleetState(FleetConfig(n_entities=max_entities, seed=env_int("FLEET_SEED", 42)))
+    entity_ids = [f"asset-{i:06d}" for i in range(max_entities)]
     entity_keys = [eid.encode("utf-8") for eid in entity_ids]
 
     # Round-robin entity selection for stable per-entity cadence
@@ -623,6 +670,13 @@ def main() -> None:
         while True:
             loop_start = time.time()
             now_ts = loop_start
+
+            # Read latest settings from polling thread (atomic dict read)
+            eps = live["eps"]
+            n_entities = live["n_entities"]
+            period_ms = max(5, env_int("BATCH_PERIOD_MS", 50))
+            period_s = period_ms / 1000.0
+            batch_n = max(1, int(eps * period_s))
 
             ids = (np.arange(ptr, ptr + batch_n, dtype=np.int64) % n_entities)
             ptr = int((ptr + batch_n) % n_entities)
