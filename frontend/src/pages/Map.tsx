@@ -33,23 +33,62 @@ interface MapLiveData {
   timestamp: string
 }
 
-// Custom drone icons
-const makeIcon = (color: string) => new Icon({
+// ─── Theme ───────────────────────────────────────────────────────────────────
+type MapTheme = 'dark' | 'light'
+
+const THEMES = {
+  dark: {
+    tile: 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+    flying:   '#00e5ff',   // vivid cyan — pops on dark map
+    warning:  '#ffb300',   // amber
+    danger:   '#ff5252',   // red
+    grounded: '#90a4ae',   // blue-grey
+  },
+  light: {
+    tile: 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+    flying:   '#0d47a1',   // deep navy — sharp on white/grey map
+    warning:  '#e65100',   // dark orange
+    danger:   '#b71c1c',   // dark red
+    grounded: '#546e7a',   // slate grey
+  },
+} as const
+
+// ─── Icon factory ─────────────────────────────────────────────────────────────
+const makeIcon = (color: string, size = 30) => new Icon({
   iconUrl: `data:image/svg+xml;charset=utf-8,${encodeURIComponent(`
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="${color}" stroke-width="2">
-      <circle cx="12" cy="12" r="3" fill="${color}" fill-opacity="0.8"/>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="${color}" stroke-width="2.2">
+      <circle cx="12" cy="12" r="3.5" fill="${color}" fill-opacity="0.9"/>
       <path d="M12 2v4M12 18v4M2 12h4M18 12h4M5.6 5.6l2.8 2.8M15.6 15.6l2.8 2.8M5.6 18.4l2.8-2.8M15.6 8.4l2.8-2.8"/>
     </svg>
   `)}`,
-  iconSize: [32, 32],
-  iconAnchor: [16, 16],
-  popupAnchor: [0, -16],
+  iconSize: [size, size],
+  iconAnchor: [size / 2, size / 2],
+  popupAnchor: [0, -(size / 2)],
 })
 
-const droneIcon        = makeIcon('#00e2ee')
-const droneIconFlying  = makeIcon('#99f7ff')
-const droneIconWarning = makeIcon('#feaa00')
-const droneIconDanger  = makeIcon('#ff7162')
+const makeGroundedIcon = (color: string) => new Icon({
+  iconUrl: `data:image/svg+xml;charset=utf-8,${encodeURIComponent(`
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="${color}" stroke-width="1.5">
+      <circle cx="12" cy="12" r="3" fill="${color}" fill-opacity="0.35"/>
+      <path d="M12 2v4M12 18v4M2 12h4M18 12h4M5.6 5.6l2.8 2.8M15.6 15.6l2.8 2.8M5.6 18.4l2.8-2.8M15.6 8.4l2.8-2.8" stroke-dasharray="3 2"/>
+    </svg>
+  `)}`,
+  iconSize: [20, 20],
+  iconAnchor: [10, 10],
+  popupAnchor: [0, -10],
+})
+
+function buildIcons(theme: MapTheme) {
+  const t = THEMES[theme]
+  return {
+    flying:   makeIcon(t.flying),
+    warning:  makeIcon(t.warning),
+    danger:   makeIcon(t.danger),
+    grounded: makeGroundedIcon(t.grounded),
+  }
+}
 
 function parseWktPolygon(wkt: string): LatLngExpression[] {
   const match = wkt.match(/\(\((.+?)\)\)/)
@@ -60,18 +99,10 @@ function parseWktPolygon(wkt: string): LatLngExpression[] {
   })
 }
 
-// ✅ FIX: Zone color now respects severity
 function getZoneColor(severity: string): string {
-  if (severity === 'critical') return '#ff7162'
-  if (severity === 'warning')  return '#feaa00'
-  return '#99f7ff'
-}
-
-function getDroneIcon(drone: DronePosition): Icon {
-  if (drone.predicted_zone_breach || drone.risk_score > 0.7) return droneIconDanger
-  if (drone.near_restricted_zone  || drone.risk_score > 0.4) return droneIconWarning
-  if (drone.is_flying) return droneIconFlying
-  return droneIcon
+  if (severity === 'critical') return '#ff5252'
+  if (severity === 'warning')  return '#ffb300'
+  return '#40c4ff'
 }
 
 // Component to invalidate map size + handle fly-to from sessionStorage
@@ -88,10 +119,22 @@ function MapController({ flyTo }: { flyTo: { lat: number; lng: number } | null }
   return null
 }
 
+
 export default function MapPage() {
   const [filter, setFilter] = useState<'all' | 'flying' | 'warning'>('all')
   const [selectedDrone, setSelectedDrone] = useState<string | null>(null)
   const [flyTo, setFlyTo] = useState<{ lat: number; lng: number } | null>(null)
+  const [theme, setTheme] = useState<MapTheme>('dark')
+
+  const icons = useMemo(() => buildIcons(theme), [theme])
+  const tileConfig = THEMES[theme]
+
+  const getDroneIcon = (drone: DronePosition) => {
+    if (drone.predicted_zone_breach || drone.risk_score > 0.7) return icons.danger
+    if (drone.near_restricted_zone  || drone.risk_score > 0.4) return icons.warning
+    if (drone.is_flying) return icons.flying
+    return icons.grounded
+  }
 
   // Read sessionStorage fly-to hint from Alerts page
   useEffect(() => {
@@ -181,14 +224,24 @@ export default function MapPage() {
                 onClick={() => setFilter(f)}
                 className={`px-4 py-1.5 rounded text-xs font-bold uppercase tracking-wider transition-all ${
                   isActive
-                    ? dangerMode ? 'bg-[#ff7162] text-[#4a0001]' : 'bg-[#99f7ff] text-[#005f64]'
-                    : `bg-[#20262f] text-[#a8abb3] hover:text-[${dangerMode ? '#ff7162' : '#99f7ff'}]`
+                    ? dangerMode ? 'bg-[#ff5252] text-white' : 'bg-[#99f7ff] text-[#005f64]'
+                    : `bg-[#20262f] text-[#a8abb3] hover:text-[${dangerMode ? '#ff5252' : '#99f7ff'}]`
                 }`}
               >
                 {f.charAt(0).toUpperCase() + f.slice(1)} ({count})
               </button>
             )
           })}
+
+          {/* Theme toggle */}
+          <button
+            onClick={() => setTheme(t => t === 'dark' ? 'light' : 'dark')}
+            title={`Switch to ${theme === 'dark' ? 'light' : 'dark'} map`}
+            className="px-3 py-1.5 rounded text-xs font-bold uppercase tracking-wider transition-all bg-[#20262f] text-[#a8abb3] hover:text-[#99f7ff] flex items-center gap-1.5"
+          >
+            <span className="material-symbols-outlined text-[14px]">{theme === 'dark' ? 'light_mode' : 'dark_mode'}</span>
+            {theme === 'dark' ? 'Light' : 'Dark'}
+          </button>
         </div>
       </div>
 
@@ -228,8 +281,8 @@ export default function MapPage() {
             >
               <MapController flyTo={flyTo} />
               <TileLayer
-                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
+                attribution={tileConfig.attribution}
+                url={tileConfig.tile}
                 crossOrigin="anonymous"
               />
 
@@ -321,12 +374,13 @@ export default function MapPage() {
       {/* Legend */}
       <div className="flex flex-wrap gap-6 mt-4 text-xs font-bold uppercase tracking-wider text-[#a8abb3]">
         {[
-          { color: '#99f7ff',  label: 'Flying' },
-          { color: '#feaa00',  label: 'Near Zone' },
-          { color: '#ff7162',  label: 'Breach Risk' },
-          { color: '#ff7162',  label: 'Critical Zone', dashed: true },
-          { color: '#feaa00',  label: 'Warning Zone',  dashed: true },
-          { color: '#99f7ff',  label: 'Info Zone',     dashed: true },
+          { color: tileConfig.flying,   label: 'Flying' },
+          { color: tileConfig.grounded, label: 'Grounded' },
+          { color: tileConfig.warning,  label: 'Near Zone' },
+          { color: tileConfig.danger,   label: 'Breach Risk' },
+          { color: '#ff5252',           label: 'Critical Zone', dashed: true },
+          { color: '#ffb300',           label: 'Warning Zone',  dashed: true },
+          { color: '#40c4ff',           label: 'Info Zone',     dashed: true },
         ].map(({ color, label, dashed }) => (
           <div key={label} className="flex items-center gap-2">
             <span className={`w-3 h-3 rounded-full ${dashed ? 'border-2 border-dashed bg-transparent' : ''}`}
@@ -335,10 +389,11 @@ export default function MapPage() {
           </div>
         ))}
         <div className="flex items-center gap-2">
-          <span className="w-8 h-0.5 border-dashed border-t-2 border-[#99f7ff]" />
+          <span className="w-8 h-0.5 border-dashed border-t-2" style={{ borderColor: tileConfig.flying }} />
           <span>Trail</span>
         </div>
       </div>
+
     </section>
   )
 }
