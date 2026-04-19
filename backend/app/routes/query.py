@@ -85,6 +85,7 @@ class EngineResult(BaseModel):
 class BenchmarkResponse(BaseModel):
     cassandra: EngineResult
     trino: EngineResult
+    spark: EngineResult
 
 
 def _sql_for_cassandra(sql: str, limit: int) -> str:
@@ -119,6 +120,22 @@ def _sql_for_trino(sql: str, limit: int) -> str:
     return sql
 
 
+def _sql_for_spark(sql: str, limit: int) -> str:
+    """Prepare SQL for the Spark Thrift Server (SparkSQL / Hive dialect)."""
+    sql = sql.strip().rstrip(';')
+    # Remove ALLOW FILTERING (Cassandra-only clause)
+    sql = re.sub(r"\s*ALLOW\s+FILTERING\s*", " ", sql, flags=re.IGNORECASE).strip()
+    # Spark Thrift Server uses the Hive metastore; tables are in the 'default'
+    # namespace unless registered otherwise.
+    # Strip any existing 'demo.' prefix then ensure tables are un-qualified
+    # (Spark will use whichever database was registered as the active DB).
+    # For the drone demo we register the table as 'drone_latest_status' in default.
+    sql = re.sub(r'\bdemo\.', '', sql, flags=re.IGNORECASE)
+    if "LIMIT" not in sql.upper():
+        sql = f"{sql} LIMIT {limit}"
+    return sql
+
+
 def _run_engine(client, sql: str) -> EngineResult:
     """Execute query on a client and return a safe EngineResult."""
     if not client.connected:
@@ -141,11 +158,13 @@ def _run_engine(client, sql: str) -> EngineResult:
 @router.post("/benchmark", response_model=BenchmarkResponse)
 async def run_benchmark(req: BenchmarkRequest):
     """
-    Run the same logical query on both Cassandra (OLTP) and Presto/Trino (OLAP).
-    Always returns HTTP 200 — per-engine errors are embedded in the response body
-    so the frontend can render both results and errors without crashing.
+    Run the same logical query on Cassandra (OLTP), Presto/Trino (OLAP), and
+    Spark (batch analytics). Always returns HTTP 200 — per-engine errors are
+    embedded in the response body so the frontend can render all three results
+    and errors without crashing.
     """
     from app.db.trino_client import trino_client
+    from app.db.spark_client import spark_client
 
     sql_upper = req.sql.strip().upper()
     if not sql_upper.startswith("SELECT"):
@@ -156,11 +175,13 @@ async def run_benchmark(req: BenchmarkRequest):
 
     cass_sql  = _sql_for_cassandra(req.sql, req.limit)
     trino_sql = _sql_for_trino(req.sql, req.limit)
+    spark_sql = _sql_for_spark(req.sql, req.limit)
 
     cass_result  = _run_engine(cassandra_client, cass_sql)
     trino_result = _run_engine(trino_client, trino_sql)
+    spark_result = _run_engine(spark_client, spark_sql)
 
-    return BenchmarkResponse(cassandra=cass_result, trino=trino_result)
+    return BenchmarkResponse(cassandra=cass_result, trino=trino_result, spark=spark_result)
 
 
 

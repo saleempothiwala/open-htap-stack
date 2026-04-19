@@ -99,6 +99,7 @@ services:
       - "8080:8080"   # Spark master UI
       - "8081:8081"   # Spark worker UI
       - "4040:4040"   # First Spark app UI
+      - "10000:10000" # Spark Thrift Server (HiveServer2)
     volumes:
       - ./spark/conf/spark-defaults.conf:/opt/spark/conf/spark-defaults.conf:ro
       - ./spark/conf/ivysettings.xml:/opt/spark/conf/ivysettings.xml:ro
@@ -126,6 +127,15 @@ services:
 
         /opt/spark/sbin/start-master.sh --host spark;
         /opt/spark/sbin/start-worker.sh spark://spark:7077;
+
+        echo "Starting Spark Thrift Server (HiveServer2) on port 10000…";
+        /opt/spark/sbin/start-thriftserver.sh \
+          --master spark://spark:7077 \
+          --conf spark.sql.hive.thriftServer.async=true \
+          --conf spark.network.timeout=800s \
+          --conf spark.executor.heartbeatInterval=60s;
+        echo "Spark Thrift Server started";
+
         tail -F /opt/spark/logs/* || tail -f /dev/null
       '
     # tips for debugging: check /opt/spark/work/*/*/stderr

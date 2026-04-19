@@ -15,6 +15,10 @@ class Settings(BaseSettings):
     trino_catalog: str = "cassandra"
     trino_schema: str = "demo"
 
+    # Spark Thrift Server (HiveServer2)
+    spark_thrift_host: str = "localhost"
+    spark_thrift_port: int = 10000
+
     # AI / Embeddings
     openrouter_api_key: str = ""
     openai_api_key: str = ""

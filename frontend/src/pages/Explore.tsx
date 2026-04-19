@@ -127,6 +127,7 @@ interface EngineResult {
 interface BenchmarkResponse {
   cassandra: EngineResult
   trino: EngineResult
+  spark: EngineResult
 }
 
 function EngineCard({
@@ -215,8 +216,10 @@ function HtapComparePanel() {
 
   const casMs = benchResult?.cassandra?.query_time_ms
   const triMs = benchResult?.trino?.query_time_ms
+  const spkMs = benchResult?.spark?.query_time_ms
   const cassOk = benchResult?.cassandra?.available && !benchResult.cassandra.error
   const trinoOk = benchResult?.trino?.available && !benchResult.trino.error
+  const sparkOk = benchResult?.spark?.available && !benchResult.spark.error
 
   return (
     <div className="space-y-6">
@@ -225,7 +228,7 @@ function HtapComparePanel() {
         <div className="bg-[#1b2028] px-6 py-3 border-b border-white/5 flex items-center gap-4">
           <span className="text-[10px] font-black uppercase tracking-[0.2em] text-[#99f7ff]">HTAP.benchmark.sql</span>
           <span className="text-[10px] text-[#a8abb3] uppercase font-bold tracking-widest opacity-50">
-            Single query · Two engines
+            Single query · Three engines
           </span>
         </div>
         <textarea
@@ -240,12 +243,12 @@ function HtapComparePanel() {
       <button
         onClick={() => compareMutation.mutate()}
         disabled={compareMutation.isPending}
-        className="w-full bg-gradient-to-r from-[#99f7ff]/20 to-[#feaa00]/20 hover:from-[#99f7ff]/30 hover:to-[#feaa00]/30 border border-white/10 text-white px-8 py-3 font-headline font-bold tracking-widest transition-all active:scale-95 rounded flex items-center justify-center gap-3 disabled:opacity-60"
+        className="w-full bg-gradient-to-r from-[#99f7ff]/20 via-[#a78bfa]/20 to-[#feaa00]/20 hover:from-[#99f7ff]/30 hover:via-[#a78bfa]/30 hover:to-[#feaa00]/30 border border-white/10 text-white px-8 py-3 font-headline font-bold tracking-widest transition-all active:scale-95 rounded flex items-center justify-center gap-3 disabled:opacity-60"
       >
         {compareMutation.isPending ? (
-          <><span className="material-symbols-outlined animate-spin" style={{ fontVariationSettings: "'FILL' 0" }}>sync</span> BENCHMARKING BOTH ENGINES...</>
+          <><span className="material-symbols-outlined animate-spin" style={{ fontVariationSettings: "'FILL' 0" }}>sync</span> BENCHMARKING ALL THREE ENGINES...</>
         ) : (
-          <><span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 0" }}>compare_arrows</span> RUN HTAP BENCHMARK</>
+          <><span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 0" }}>compare_arrows</span> RUN HTAP BENCHMARK — 3 ENGINES</>
         )}
       </button>
 
@@ -257,9 +260,9 @@ function HtapComparePanel() {
         </div>
       )}
 
-      {/* Per-engine results */}
+      {/* Per-engine results — 3 columns */}
       {benchResult && (
-        <div className="grid grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <EngineCard
             title="Cassandra — OLTP"
             sub="Latest-state point read"
@@ -272,30 +275,50 @@ function HtapComparePanel() {
             color="#feaa00"
             result={benchResult.trino}
           />
+          <EngineCard
+            title="Spark SQL — Batch Analytics"
+            sub="Distributed in-memory compute"
+            color="#a78bfa"
+            result={benchResult.spark}
+          />
         </div>
       )}
 
-      {/* Speed delta insight */}
-      {benchResult && cassOk && trinoOk && casMs !== undefined && triMs !== undefined && (
-        <div className="glass-panel rounded-xl p-6 text-center border border-white/5">
-          <p className="text-[10px] font-bold text-[#a8abb3] uppercase tracking-widest mb-2">HTAP Insight</p>
-          {triMs > casMs ? (
-            <p className="font-headline text-2xl font-black">
-              Cassandra answered{' '}
-              <span className="text-[#99f7ff]">{(triMs / casMs).toFixed(1)}× faster</span>
-              {' '}for latest-state lookup.
-            </p>
-          ) : casMs > triMs ? (
-            <p className="font-headline text-2xl font-black">
-              Presto/Trino answered{' '}
-              <span className="text-[#feaa00]">{(casMs / triMs).toFixed(1)}× faster</span>
-              {' '}— try an aggregation query to see Cassandra win.
-            </p>
-          ) : (
-            <p className="font-headline text-2xl font-black">Both engines matched at <span className="text-[#99f7ff]">{casMs.toFixed(0)}ms</span>.</p>
-          )}
-          <p className="text-[#a8abb3] text-sm mt-2">
-            Presto/Trino shines for historical aggregations across billions of rows — Cassandra wins for sub-10ms point reads.
+      {/* Speed delta insight — now covers all 3 engines */}
+      {benchResult && (cassOk || trinoOk || sparkOk) && (
+        <div className="glass-panel rounded-xl p-6 border border-white/5 space-y-4">
+          <p className="text-[10px] font-bold text-[#a8abb3] uppercase tracking-widest text-center">HTAP Insight — Engine Comparison</p>
+
+          {/* Speed bar chart */}
+          {[{ label: 'Cassandra (OLTP)', ms: casMs, ok: cassOk, color: '#99f7ff' },
+            { label: 'Presto / Trino (OLAP)', ms: triMs, ok: trinoOk, color: '#feaa00' },
+            { label: 'Spark SQL (Batch)', ms: spkMs, ok: sparkOk, color: '#a78bfa' },
+          ].map(({ label, ms, ok, color }) => {
+            const maxMs = Math.max(casMs ?? 0, triMs ?? 0, spkMs ?? 0, 1)
+            const pct = ok && ms !== undefined ? Math.max(2, (ms / maxMs) * 100) : 0
+            return (
+              <div key={label} className="space-y-1">
+                <div className="flex justify-between text-[10px] font-bold">
+                  <span style={{ color }}>{label}</span>
+                  <span className="text-[#a8abb3]">
+                    {ok && ms !== undefined ? `${ms.toFixed(0)} ms` : 'unavailable'}
+                  </span>
+                </div>
+                <div className="h-2 bg-white/5 rounded-full overflow-hidden">
+                  <div
+                    className="h-full rounded-full transition-all duration-700"
+                    style={{ width: `${pct}%`, background: color, opacity: ok ? 1 : 0.2 }}
+                  />
+                </div>
+              </div>
+            )
+          })}
+
+          {/* Narrative */}
+          <p className="text-sm text-[#a8abb3] leading-relaxed pt-2 border-t border-white/5">
+            <span className="text-[#99f7ff] font-bold">Cassandra</span> wins for sub-millisecond point reads on the latest-state table.
+            {' '}<span className="text-[#feaa00] font-bold">Presto/Trino</span> excels at analytical aggregations across historical event streams.
+            {' '}<span className="text-[#a78bfa] font-bold">Spark SQL</span> provides distributed batch analytics and ML-ready data processing at scale.
           </p>
         </div>
       )}

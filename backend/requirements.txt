@@ -1,4 +1,4 @@
-make # HTAP Mission Control Backend Dependencies
+# HTAP Mission Control Backend Dependencies
 fastapi==0.115.6
 uvicorn[standard]==0.34.0
 pydantic==2.10.4
@@ -8,4 +8,8 @@ trino==0.332.0
 httpx==0.28.1
 python-dotenv==1.0.1
 psutil==6.1.1
-docker==7.1.0numpy==2.2.1
+docker==7.1.0
+numpy==2.2.1
+# Spark Thrift Server (HiveServer2) connectivity — auth=NONE, no SASL needed
+pyhive==0.7.0
+thrift>=0.16.0
