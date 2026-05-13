@@ -13,3 +13,4 @@ numpy==2.2.1
 # Spark Thrift Server (HiveServer2) connectivity — auth=NONE, no SASL needed
 pyhive==0.7.0
 thrift>=0.16.0
+thrift-sasl>=0.4.3

@@ -96,8 +96,8 @@ services:
         condition: service_healthy
     ports:
       - "7077:7077"   # Spark master
-      - "8080:8080"   # Spark master UI
-      - "8081:8081"   # Spark worker UI
+      - "8082:8080"   # Spark master UI (8080 occupied by Docker Desktop)
+      - "8083:8081"   # Spark worker UI
       - "4040:4040"   # First Spark app UI
       - "10000:10000" # Spark Thrift Server (HiveServer2)
     volumes:
@@ -124,6 +124,20 @@ services:
         echo "5fa98cd1a63c99a44dd8d3b77e4762b066a5d0c5  /opt/spark/jars/guava-16.0.1.jar" | sha1sum -c - || echo "SHA1 verification failed!";
         rm -f /opt/spark/jars/guava-14.0.1.jar;
         echo "Guava upgraded to 16.0.1 successfully";
+
+        echo "Copying Cassandra connector JARs to /opt/spark/jars/ (needed at JVM start)…";
+        IVY=/opt/spark/work-dir/.ivy2/cache;
+        for jar in \
+          com.datastax.spark/spark-cassandra-connector_2.12/jars/spark-cassandra-connector_2.12-3.5.1.jar \
+          com.datastax.spark/spark-cassandra-connector-driver_2.12/jars/spark-cassandra-connector-driver_2.12-3.5.1.jar \
+          org.apache.cassandra/java-driver-core-shaded/jars/java-driver-core-shaded-4.18.1.jar \
+          com.datastax.oss/native-protocol/bundles/native-protocol-1.5.1.jar \
+          org.apache.cassandra/java-driver-mapper-runtime/bundles/java-driver-mapper-runtime-4.18.1.jar \
+          org.apache.cassandra/java-driver-query-builder/bundles/java-driver-query-builder-4.18.1.jar; do
+            src="$IVY/$jar";
+            [ -f "$src" ] && cp "$src" /opt/spark/jars/ && echo "  copied $(basename $src)" || echo "  skipped (not cached yet): $jar";
+        done;
+        echo "Cassandra connector JAR copy done";
 
         /opt/spark/sbin/start-master.sh --host spark;
         /opt/spark/sbin/start-worker.sh spark://spark:7077;

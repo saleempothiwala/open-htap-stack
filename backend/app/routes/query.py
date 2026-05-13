@@ -139,6 +139,11 @@ def _sql_for_spark(sql: str, limit: int) -> str:
 def _run_engine(client, sql: str) -> EngineResult:
     """Execute query on a client and return a safe EngineResult."""
     if not client.connected:
+        try:
+            client.connect()
+        except Exception:
+            pass
+    if not client.connected:
         return EngineResult(available=False, error="Engine not connected")
     try:
         start = time.time()

@@ -38,3 +38,27 @@ Success! Connected.
 [2026-04-19T00:51:34.548259] Attempting connection to 127.0.0.1:9042
 Cluster object created. Connecting to 'demo'...
 Success! Connected.
+
+[2026-05-13T12:41:54.820997] Attempting connection to localhost:9042
+Cluster object created. Connecting to 'demo'...
+Success! Connected.
+
+[2026-05-13T12:45:59.683713] Attempting connection to localhost:9042
+Cluster object created. Connecting to 'demo'...
+Success! Connected.
+
+[2026-05-13T12:46:48.219086] Attempting connection to localhost:9042
+Cluster object created. Connecting to 'demo'...
+Success! Connected.
+
+[2026-05-13T12:59:51.592359] Attempting connection to localhost:9042
+Cluster object created. Connecting to 'demo'...
+Success! Connected.
+
+[2026-05-13T13:12:59.128637] Attempting connection to localhost:9042
+Cluster object created. Connecting to 'demo'...
+Success! Connected.
+
+[2026-05-13T13:14:29.601647] Attempting connection to localhost:9042
+Cluster object created. Connecting to 'demo'...
+Success! Connected.
