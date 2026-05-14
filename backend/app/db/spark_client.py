@@ -24,10 +24,10 @@ class SparkThriftClient:
         self._conn = None
         self._connected = False
 
-    # Trino JDBC URL — inside the container network it's trino:8080;
-    # from the host (dev mode) it's localhost:8088
-    _TRINO_JDBC_HOST = os.getenv("TRINO_HOST_OVERRIDE", "localhost")
-    _TRINO_JDBC_PORT = int(os.getenv("TRINO_PORT_OVERRIDE", "8088"))
+    # Trino JDBC URL — Spark runs inside the Docker network, so it reaches
+    # Trino on the internal address presto:8080, not the host-mapped 8088.
+    _TRINO_JDBC_HOST = os.getenv("TRINO_INTERNAL_HOST", "presto")
+    _TRINO_JDBC_PORT = int(os.getenv("TRINO_INTERNAL_PORT", "8080"))
 
     def connect(self):
         """Attempt to connect to the Spark Thrift Server and register tables."""
@@ -51,30 +51,39 @@ class SparkThriftClient:
             self._connected = False
 
     def _register_tables(self):
-        """Create a JDBC-backed Spark table that reads Cassandra data via Trino.
+        """Create a JDBC-backed Spark TEMP VIEW that reads Cassandra data via Trino.
 
-        Trino's JDBC driver is already on Spark's classpath and doesn't need
-        extra setup. The resulting table is queryable with standard SparkSQL.
+        Key design decisions:
+        - TEMP VIEW (not permanent table) avoids Derby metastore conflicts.
+        - Parenthesized subquery as dbtable projects away uuid/binary columns
+          that Spark's JDBC layer can't handle (Cassandra uuid has no SQL mapping).
+        - Trino is the bridge: Spark -> Trino JDBC -> Trino -> Cassandra.
         """
         jdbc_url = (
             f"jdbc:trino://{self._TRINO_JDBC_HOST}:{self._TRINO_JDBC_PORT}"
             f"/cassandra/demo"
         )
+        # Project only Spark-compatible columns (exclude uuid event_id, binary payload, timestamps)
+        proj = (
+            "entity_id, altitude_m, speed_mps, risk_score, is_flying, "
+            "latitude, longitude, heading_deg, near_restricted_zone, "
+            "predicted_zone_breach, temp_internal_c, temp_external_c, telemetry_age_s"
+        )
         ddl = f"""
-CREATE TABLE IF NOT EXISTS default.drone_latest_status
+CREATE OR REPLACE TEMP VIEW drone_latest_status
 USING jdbc
 OPTIONS (
-  url        '{jdbc_url}',
-  dbtable    'drone_latest_status',
-  driver     'io.trino.jdbc.TrinoDriver',
-  user       'spark'
+  url    '{jdbc_url}',
+  dbtable '(SELECT {proj} FROM drone_latest_status) AS t',
+  driver  'io.trino.jdbc.TrinoDriver',
+  user    'spark'
 )
 """
         try:
             cur = self._conn.cursor()
             cur.execute(ddl.strip())
             cur.close()
-            print("[db] Spark JDBC table drone_latest_status registered (via Trino)")
+            print("[db] Spark TEMP VIEW drone_latest_status registered (Spark→Trino→Cassandra)")
         except Exception as e:
             print(f"[db] Spark table registration warning: {e}")
 
