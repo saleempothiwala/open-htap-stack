@@ -523,14 +523,33 @@ export default function ExplorePage() {
                         value={aiQuery}
                         onChange={(e) => setAiQuery(e.target.value)}
                         onKeyDown={(e) => e.key === 'Enter' && handleRun()}
-                        placeholder="e.g. Find drones monitoring environmental hazards..."
+                        placeholder="e.g. renewable energy and climate change..."
                         className="w-full bg-[#151a21] border border-white/10 rounded-full px-8 py-5 text-[#f1f3fc] text-lg focus:outline-none focus:border-[#feaa00]/50 transition-all shadow-2xl"
                       />
                       <MaterialIcon name="auto_awesome" className="absolute right-6 top-1/2 -translate-y-1/2 text-[#feaa00]" />
                     </div>
                     <p className="text-[10px] text-[#a8abb3] font-medium max-w-md mx-auto leading-relaxed">
-                      Powered by Vector Embeddings in Cassandra 5.0. Searches for meaning and context across thousands of drone mission status logs.
+                      Each monitored asset carries a text snippet drawn from a diverse corpus (history, science, finance, urban planning…).
+                      Vector search finds assets whose snippets are semantically closest to your query — this is <em>text similarity</em>, not geographic proximity.
                     </p>
+                    <div className="flex flex-wrap justify-center gap-2 mt-2">
+                      {[
+                        'sovereign wealth fund',
+                        'quantum computing breakthroughs',
+                        'Norse seafarers Viking Age',
+                        'hydropower renewable energy',
+                        'behavioural economics Nobel',
+                        'genome DNA sequencing',
+                      ].map((hint) => (
+                        <button
+                          key={hint}
+                          onClick={() => setAiQuery(hint)}
+                          className="text-[9px] font-bold uppercase tracking-widest px-3 py-1 rounded-full border border-[#feaa00]/20 text-[#feaa00]/70 hover:border-[#feaa00]/60 hover:text-[#feaa00] transition-all"
+                        >
+                          {hint}
+                        </button>
+                      ))}
+                    </div>
                   </div>
                 )}
               </div>
@@ -582,11 +601,11 @@ export default function ExplorePage() {
                 </div>
               </div>
               <div className="glass-panel p-6 rounded-xl border-l-4 border-l-slate-600">
-                <h3 className="text-sm font-black text-[#f1f3fc] uppercase tracking-wider mb-2">Capabilities</h3>
+                <h3 className="text-sm font-black text-[#f1f3fc] uppercase tracking-wider mb-2">How It Works</h3>
                 <p className="text-[10px] text-[#a8abb3] leading-relaxed">
                   {activeTab === 'sql'
                     ? 'Perform traditional HTAP queries across real-time telemetry and historical event streams.'
-                    : 'Leverage RAG patterns to query the database using natural language and conceptual meaning.'}
+                    : 'Each asset carries a text snippet on an unrelated topic. Your query is embedded and compared against those snippets using cosine similarity — closest semantic meaning wins.'}
                 </p>
               </div>
             </div>
