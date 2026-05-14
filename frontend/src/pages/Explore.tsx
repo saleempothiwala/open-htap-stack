@@ -331,7 +331,7 @@ function HtapComparePanel() {
 export default function ExplorePage() {
   const [activeTab, setActiveTab] = useState<'sql' | 'ai' | 'compare'>('sql')
   const [sql, setSql] = useState('SELECT * FROM demo.drone_latest_status LIMIT 10')
-  const [aiQuery, setAiQuery] = useState('Which drones are near airports?')
+  const [aiQuery, setAiQuery] = useState('renewable energy and hydropower')
   const [engine, setEngine] = useState<'cassandra' | 'presto'>('cassandra')
   const [result, setResult] = useState<QueryResult | null>(null)
   const [aiResults, setAiResults] = useState<VectorResult[]>([])
