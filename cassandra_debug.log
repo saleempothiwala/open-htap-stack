@@ -62,3 +62,21 @@ Success! Connected.
 [2026-05-13T13:14:29.601647] Attempting connection to localhost:9042
 Cluster object created. Connecting to 'demo'...
 Success! Connected.
+
+[2026-05-14T10:58:09.399868] Attempting connection to localhost:9042
+Cluster object created. Connecting to 'demo'...
+Connection failed: ('Unable to connect to any servers', {'::1:9042': ConnectionRefusedError(61, "Tried connecting to [('::1', 9042, 0, 0)]. Last error: Connection refused"), '127.0.0.1:9042': ConnectionRefusedError(61, "Tried connecting to [('127.0.0.1', 9042)]. Last error: Connection refused")})
+Traceback (most recent call last):
+  File "/Users/saleem/projects/open-htap-stack/backend/app/db/cassandra_client.py", line 69, in connect
+    self._session = self._cluster.connect(settings.cassandra_keyspace)
+                    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "cassandra/cluster.py", line 1749, in cassandra.cluster.Cluster.connect
+  File "cassandra/cluster.py", line 1768, in cassandra.cluster.Cluster.connect
+  File "cassandra/cluster.py", line 1760, in cassandra.cluster.Cluster.connect
+  File "cassandra/cluster.py", line 3556, in cassandra.cluster.ControlConnection.connect
+  File "cassandra/cluster.py", line 3611, in cassandra.cluster.ControlConnection._reconnect_internal
+cassandra.cluster.NoHostAvailable: ('Unable to connect to any servers', {'::1:9042': ConnectionRefusedError(61, "Tried connecting to [('::1', 9042, 0, 0)]. Last error: Connection refused"), '127.0.0.1:9042': ConnectionRefusedError(61, "Tried connecting to [('127.0.0.1', 9042)]. Last error: Connection refused")})
+
+[2026-05-14T11:53:46.874764] Attempting connection to localhost:9042
+Cluster object created. Connecting to 'demo'...
+Success! Connected.

@@ -114,41 +114,50 @@ services:
       bash -lc '
         set -euo pipefail;
 
-        echo "Installing Cassandra-compatible JNA with native libraries…";
-        wget -q -O /opt/spark/jars/jna.jar https://repo1.maven.org/maven2/net/java/dev/jna/jna/5.13.0/jna-5.13.0.jar;
-        echo "1200e7ebeedbe0d10062093f32925a912020e747  /opt/spark/jars/jna.jar" | sha1sum -c - || (echo "SHA1 verification failed!" && exit 1);
-        echo "JNA installed and verified successfully";
+        echo "=== Spark container starting ===";
 
-        echo "Replacing guava-14.0.1.jar with guava-16.0.1…";
-        wget -q -O /opt/spark/jars/guava-16.0.1.jar https://repo1.maven.org/maven2/com/google/guava/guava/16.0.1/guava-16.0.1.jar;
-        echo "5fa98cd1a63c99a44dd8d3b77e4762b066a5d0c5  /opt/spark/jars/guava-16.0.1.jar" | sha1sum -c - || echo "SHA1 verification failed!";
+        echo "[1/6] Installing JNA...";
+        wget -q -O /opt/spark/jars/jna.jar \
+          https://repo1.maven.org/maven2/net/java/dev/jna/jna/5.13.0/jna-5.13.0.jar;
+        echo "1200e7ebeedbe0d10062093f32925a912020e747  /opt/spark/jars/jna.jar" | sha1sum -c -;
+
+        echo "[2/6] Upgrading Guava to 16.0.1...";
+        wget -q -O /opt/spark/jars/guava-16.0.1.jar \
+          https://repo1.maven.org/maven2/com/google/guava/guava/16.0.1/guava-16.0.1.jar;
         rm -f /opt/spark/jars/guava-14.0.1.jar;
-        echo "Guava upgraded to 16.0.1 successfully";
 
-        echo "Copying Cassandra connector JARs to /opt/spark/jars/ (needed at JVM start)…";
-        IVY=/opt/spark/work-dir/.ivy2/cache;
-        for jar in \
-          com.datastax.spark/spark-cassandra-connector_2.12/jars/spark-cassandra-connector_2.12-3.5.1.jar \
-          com.datastax.spark/spark-cassandra-connector-driver_2.12/jars/spark-cassandra-connector-driver_2.12-3.5.1.jar \
-          org.apache.cassandra/java-driver-core-shaded/jars/java-driver-core-shaded-4.18.1.jar \
-          com.datastax.oss/native-protocol/bundles/native-protocol-1.5.1.jar \
-          org.apache.cassandra/java-driver-mapper-runtime/bundles/java-driver-mapper-runtime-4.18.1.jar \
-          org.apache.cassandra/java-driver-query-builder/bundles/java-driver-query-builder-4.18.1.jar; do
-            src="$IVY/$jar";
-            [ -f "$src" ] && cp "$src" /opt/spark/jars/ && echo "  copied $(basename $src)" || echo "  skipped (not cached yet): $jar";
-        done;
-        echo "Cassandra connector JAR copy done";
+        echo "[3/6] Downloading Trino JDBC JAR...";
+        wget -q -nc -O /opt/spark/jars/trino-jdbc-451.jar \
+          https://repo1.maven.org/maven2/io/trino/trino-jdbc/451/trino-jdbc-451.jar || true;
+        ls -sh /opt/spark/jars/trino-jdbc-451.jar;
 
+        echo "[4/6] Downloading Cassandra connector via spark-submit --packages...";
+        if [ ! -f /opt/spark/jars/spark-cassandra-connector_2.12-3.5.1.jar ]; then
+          /opt/spark/bin/spark-submit \
+            --master local \
+            --packages com.datastax.spark:spark-cassandra-connector_2.12:3.5.1 \
+            --conf spark.jars.ivy=/opt/spark/work-dir/.ivy2 \
+            /dev/null 2>&1 | tail -3 || true;
+          cp -f /opt/spark/work-dir/.ivy2/cache/com.datastax.spark/spark-cassandra-connector_2.12/jars/spark-cassandra-connector_2.12-3.5.1.jar /opt/spark/jars/ 2>/dev/null || true;
+          cp -f /opt/spark/work-dir/.ivy2/cache/com.datastax.spark/spark-cassandra-connector-driver_2.12/jars/spark-cassandra-connector-driver_2.12-3.5.1.jar /opt/spark/jars/ 2>/dev/null || true;
+          cp -f /opt/spark/work-dir/.ivy2/cache/org.apache.cassandra/java-driver-core-shaded/jars/java-driver-core-shaded-4.18.1.jar /opt/spark/jars/ 2>/dev/null || true;
+          cp -f /opt/spark/work-dir/.ivy2/cache/com.datastax.oss/native-protocol/bundles/native-protocol-1.5.1.jar /opt/spark/jars/ 2>/dev/null || true;
+          echo "Cassandra connector JARs staged";
+        else
+          echo "Cassandra connector JARs already present";
+        fi;
+
+        echo "[5/6] Starting Spark master + worker...";
         /opt/spark/sbin/start-master.sh --host spark;
         /opt/spark/sbin/start-worker.sh spark://spark:7077;
 
-        echo "Starting Spark Thrift Server (HiveServer2) on port 10000…";
+        echo "[6/6] Starting Spark Thrift Server on port 10000...";
         /opt/spark/sbin/start-thriftserver.sh \
           --master spark://spark:7077 \
           --conf spark.sql.hive.thriftServer.async=true \
           --conf spark.network.timeout=800s \
           --conf spark.executor.heartbeatInterval=60s;
-        echo "Spark Thrift Server started";
+        echo "=== Spark Thrift Server started ===";
 
         tail -F /opt/spark/logs/* || tail -f /dev/null
       '
