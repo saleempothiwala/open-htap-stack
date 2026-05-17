@@ -48,8 +48,9 @@ def _write_settings_file(s: "DemoSettings") -> None:
         print(f"[settings] failed to write settings file: {e}")
 
 
-# Delete any stale settings file from a previous run so defaults are used.
-_delete_settings_file()
+# NOTE: we no longer delete the settings file on startup.
+# Instead we write the env-var defaults below (after DemoSettings is defined)
+# so the producer immediately gets a valid file on any backend restart.
 
 
 def _defaults_from_env() -> "DemoSettings":
@@ -81,8 +82,11 @@ class DemoSettingsResponse(BaseModel):
 
 
 # In-memory store — seeded from env vars at startup.
-# Reverts to env-var defaults automatically when the pod is restarted.
+# Also writes the defaults to the shared settings file immediately so the
+# producer picks them up within its next poll cycle (≤10 s) rather than
+# staying on its baked-in container env-var value.
 _demo_settings: DemoSettings = _defaults_from_env()
+_write_settings_file(_demo_settings)  # push defaults to producer on every backend start
 
 
 @router.get("/demo/defaults", response_model=DemoSettingsResponse)

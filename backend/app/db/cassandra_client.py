@@ -173,7 +173,7 @@ class CassandraClient:
             "SELECT entity_id, event_time, latitude, longitude, altitude_m, "
             "speed_mps, heading_deg, is_flying, temp_internal_c, temp_external_c, "
             "near_restricted_zone, predicted_zone_breach, risk_score "
-            "FROM drone_latest_status LIMIT 500"
+            "FROM drone_latest_status LIMIT 2000"
         )
 
     def get_flying_drones(self) -> List[Dict[str, Any]]:
@@ -182,7 +182,7 @@ class CassandraClient:
             "SELECT entity_id, event_time, latitude, longitude, altitude_m, "
             "speed_mps, heading_deg, is_flying, temp_internal_c, temp_external_c, "
             "near_restricted_zone, predicted_zone_breach, risk_score "
-            "FROM drone_latest_status WHERE is_flying = true ALLOW FILTERING LIMIT 500"
+            "FROM drone_latest_status WHERE is_flying = true ALLOW FILTERING LIMIT 2000"
         )
 
     def get_drone_detail(self, entity_id: str) -> Optional[Dict[str, Any]]:

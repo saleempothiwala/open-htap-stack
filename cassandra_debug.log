@@ -98,3 +98,19 @@ cassandra.cluster.NoHostAvailable: ('Unable to connect to any servers', {'::1:90
 [2026-05-17T13:14:17.596580] Attempting connection to localhost:9042
 Cluster object created. Connecting to 'demo'...
 Success! Connected.
+
+[2026-05-17T13:27:23.103699] Attempting connection to localhost:9042
+Cluster object created. Connecting to 'demo'...
+Success! Connected.
+
+[2026-05-17T13:27:39.757831] Attempting connection to localhost:9042
+Cluster object created. Connecting to 'demo'...
+Success! Connected.
+
+[2026-05-17T13:38:30.290637] Attempting connection to localhost:9042
+Cluster object created. Connecting to 'demo'...
+Success! Connected.
+
+[2026-05-17T13:42:01.397727] Attempting connection to localhost:9042
+Cluster object created. Connecting to 'demo'...
+Success! Connected.
