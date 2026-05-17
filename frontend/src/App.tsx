@@ -32,7 +32,12 @@ function Sidebar() {
   const navigate = useNavigate()
 
   return (
-    <aside className="fixed left-0 top-0 h-full w-64 z-40 bg-[#121820]/80 backdrop-blur-xl shadow-[4px_0_24px_rgba(0,0,0,0.5)] flex flex-col pt-24 pb-8 px-4">
+    <aside className="fixed left-0 top-0 h-full w-64 z-40 bg-[#121820]/80 backdrop-blur-xl shadow-[4px_0_24px_rgba(0,0,0,0.5)] flex flex-col pt-0 pb-8 px-4">
+      {/* Kermit Logo Full Width Header */}
+      <div className="h-[76px] -mx-4 flex items-center justify-center border-b border-white/5 mb-8 bg-[#0a0e14]/40">
+        <img src="/kermit-logo.svg" alt="Kermit Logo" className="w-[180px] h-auto object-contain drop-shadow-[0_0_12px_rgba(255,255,255,0.1)]" />
+      </div>
+
       <div className="mb-10 px-2 flex items-center gap-3">
         <div className="w-10 h-10 rounded-lg bg-[#151a21] flex items-center justify-center border border-[#99f7ff]/20">
           <MaterialIcon name="terminal" className="text-[#99f7ff]" />

@@ -1038,3 +1038,1033 @@ INFO:     127.0.0.1:65332 - "GET /api/health HTTP/1.1" 200 OK
 INFO:     127.0.0.1:65335 - "GET /api/health HTTP/1.1" 200 OK
 INFO:     127.0.0.1:65338 - "GET /api/map/live?limit=20 HTTP/1.1" 200 OK
 INFO:     127.0.0.1:65341 - "GET /api/overview/kpis HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65348 - "GET /api/overview/kpis HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65353 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65356 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65359 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65363 - "GET /api/demo/latency HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65366 - "GET /api/demo/latency HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65369 - "GET /api/map/live?limit=20 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65373 - "GET /api/demo/latency HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65376 - "GET /api/overview/kpis HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65379 - "GET /api/overview/ingestion-history?hours=8 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65382 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65385 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65388 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65391 - "GET /api/overview/kpis HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65394 - "GET /api/map/live?limit=20 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65397 - "GET /api/demo/latency HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65400 - "GET /api/overview/kpis HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65403 - "GET /api/demo/latency HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65406 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65409 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65412 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65415 - "GET /api/demo/latency HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65418 - "GET /api/map/live?limit=20 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65422 - "GET /api/overview/kpis HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65425 - "GET /api/overview/ingestion-history?hours=8 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65428 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65431 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65434 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65437 - "GET /api/overview/kpis HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65441 - "GET /api/map/live?limit=20 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65444 - "GET /api/demo/latency HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65447 - "GET /api/demo/latency HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65450 - "GET /api/overview/kpis HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65453 - "GET /api/demo/latency HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65456 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65459 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65462 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65466 - "GET /api/overview/kpis HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65469 - "GET /api/map/live?limit=20 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65474 - "GET /api/overview/ingestion-history?hours=8 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65478 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65481 - "GET /api/overview/kpis HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65484 - "GET /api/demo/latency HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65487 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65490 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65493 - "GET /api/demo/latency HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65496 - "GET /api/map/live?limit=20 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65499 - "GET /api/demo/latency HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65502 - "GET /api/overview/kpis HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65507 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65510 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65513 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65517 - "GET /api/overview/kpis HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65520 - "GET /api/settings/demo HTTP/1.1" 200 OK
+[settings] data generation paused
+INFO:     127.0.0.1:65523 - "POST /api/settings/demo/pause HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65526 - "GET /api/demo/latency HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65529 - "GET /api/demo/latency HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65532 - "POST /api/settings/demo HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65535 - "GET /api/settings/demo HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49154 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49157 - "GET /api/demo/latency HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49161 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49164 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49167 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49170 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49173 - "GET /api/demo/latency HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49176 - "GET /api/demo/latency HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49180 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49183 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49187 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49190 - "GET /api/demo/latency HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49193 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49196 - "GET /api/demo/latency HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49199 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49202 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49205 - "GET /api/demo/latency HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49208 - "GET /api/demo/latency HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49211 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49214 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49217 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49220 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49223 - "GET /api/demo/latency HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49226 - "GET /api/demo/latency HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49229 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49232 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49236 - "GET /api/demo/latency HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49239 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49242 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49245 - "GET /api/demo/latency HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49249 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49252 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49256 - "GET /api/demo/latency HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49259 - "GET /api/demo/latency HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49263 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49266 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49271 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49274 - "GET /api/demo/latency HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49277 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49281 - "GET /api/demo/latency HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49284 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49287 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49290 - "GET /api/demo/latency HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49293 - "GET /api/demo/latency HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49296 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49299 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49302 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49305 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49308 - "GET /api/demo/latency HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49311 - "GET /api/demo/latency HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49314 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49317 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49321 - "GET /api/demo/latency HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49324 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49329 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49330 - "GET /api/demo/latency HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49339 - "GET /api/overview/kpis HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49342 - "GET /api/overview/ingestion-history?hours=8 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49343 - "GET /api/map/live?limit=20 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49345 - "GET /api/overview/kpis HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49348 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49351 - "GET /api/map/live?limit=20 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49354 - "GET /api/overview/kpis HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49357 - "GET /api/demo/latency HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49360 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49363 - "GET /api/overview/kpis HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49366 - "GET /api/overview/ingestion-history?hours=8 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49369 - "GET /api/map/live?limit=20 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49372 - "GET /api/overview/kpis HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49375 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49378 - "GET /api/demo/latency HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49381 - "GET /api/map/live?limit=20 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49384 - "GET /api/overview/kpis HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49388 - "GET /api/overview/kpis HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49391 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49394 - "GET /api/overview/ingestion-history?hours=8 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49397 - "GET /api/map/live?limit=20 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49401 - "GET /api/overview/kpis HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49404 - "GET /api/demo/latency HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49407 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49410 - "GET /api/overview/kpis HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49413 - "GET /api/map/live?limit=20 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49416 - "GET /api/overview/kpis HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49420 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49423 - "GET /api/overview/ingestion-history?hours=8 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49426 - "GET /api/map/live?limit=20 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49429 - "GET /api/overview/kpis HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49432 - "GET /api/demo/latency HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49435 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49438 - "GET /api/overview/kpis HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49441 - "GET /api/map/live?limit=20 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49444 - "GET /api/overview/kpis HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49447 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49450 - "GET /api/demo/latency HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49453 - "GET /api/overview/kpis HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49456 - "GET /api/overview/ingestion-history?hours=8 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49459 - "GET /api/map/live?limit=20 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49462 - "GET /api/overview/kpis HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49465 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49468 - "GET /api/map/live?limit=20 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49471 - "GET /api/overview/kpis HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49474 - "GET /api/demo/latency HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49477 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49480 - "GET /api/overview/kpis HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49483 - "GET /api/overview/ingestion-history?hours=8 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49486 - "GET /api/map/live?limit=20 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49489 - "GET /api/overview/kpis HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49492 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49497 - "GET /api/map/live?limit=2000 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49503 - "GET /api/demo/latency HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49509 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49512 - "GET /api/map/live?limit=2000 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49515 - "GET /api/demo/latency HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49518 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49521 - "GET /api/map/live?limit=2000 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49524 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49527 - "GET /api/map/live?limit=2000 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49530 - "GET /api/demo/latency HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49533 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49536 - "GET /api/map/live?limit=2000 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49540 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49543 - "GET /api/demo/latency HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49546 - "GET /api/map/live?limit=2000 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49549 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49553 - "GET /api/map/live?limit=2000 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49557 - "GET /api/demo/latency HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49560 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49563 - "GET /api/map/live?limit=2000 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49568 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49571 - "GET /api/map/live?limit=2000 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49574 - "GET /api/demo/latency HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49577 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49580 - "GET /api/map/live?limit=2000 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49584 - "GET /api/demo/latency HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49587 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49590 - "GET /api/map/live?limit=2000 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49593 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49596 - "GET /api/map/live?limit=2000 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49599 - "GET /api/demo/latency HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49602 - "GET /api/alerts?limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49605 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49608 - "GET /api/alerts?limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49611 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49614 - "GET /api/demo/latency HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49617 - "GET /api/alerts?limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49620 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49623 - "GET /api/alerts?limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49626 - "GET /api/demo/latency HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49629 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49636 - "GET /api/alerts?limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49661 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49673 - "GET /api/demo/latency HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49709 - "GET /api/alerts?limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49720 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49726 - "GET /api/alerts?limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49729 - "GET /api/demo/latency HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49732 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49735 - "GET /api/alerts?limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49738 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49742 - "GET /api/demo/latency HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49745 - "GET /api/alerts?limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49748 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49751 - "GET /api/alerts?limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49754 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49757 - "GET /api/demo/latency HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49760 - "GET /api/alerts?limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49763 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49767 - "GET /api/alerts?limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49770 - "GET /api/demo/latency HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49773 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49776 - "GET /api/alerts?limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49779 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49782 - "GET /api/demo/latency HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49785 - "GET /api/alerts?limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49788 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49792 - "GET /api/alerts?limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49801 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49804 - "GET /api/demo/latency HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49808 - "GET /api/alerts?limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49811 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49814 - "GET /api/demo/latency HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49817 - "GET /api/alerts?limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49820 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49829 - "GET /api/alerts?limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49833 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49836 - "GET /api/demo/latency HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49839 - "GET /api/alerts?limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49842 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49845 - "GET /api/alerts?limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49848 - "GET /api/demo/latency HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49851 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49854 - "GET /api/alerts?limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49857 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49860 - "GET /api/demo/latency HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49863 - "GET /api/alerts?limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49866 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49869 - "GET /api/alerts?limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49872 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49875 - "GET /api/demo/latency HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49878 - "GET /api/alerts?limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49881 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49884 - "GET /api/demo/latency HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49887 - "GET /api/alerts?limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49890 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49897 - "GET /api/alerts?limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49901 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49904 - "GET /api/demo/latency HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49907 - "GET /api/alerts?limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49910 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49914 - "GET /api/alerts?limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49917 - "GET /api/demo/latency HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49920 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49923 - "GET /api/alerts?limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49926 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49935 - "GET /api/demo/latency HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49938 - "GET /api/alerts?limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49942 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49945 - "GET /api/alerts?limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49949 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49952 - "GET /api/demo/latency HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49955 - "GET /api/alerts?limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49958 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49961 - "GET /api/alerts?limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49964 - "GET /api/demo/latency HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49967 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49975 - "GET /api/alerts?limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49978 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49983 - "GET /api/demo/latency HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49987 - "GET /api/alerts?limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49990 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49993 - "GET /api/alerts?limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50000 - "GET /api/overview/kpis HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50001 - "GET /api/overview/ingestion-history?hours=8 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50003 - "GET /api/map/live?limit=20 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50005 - "GET /api/demo/latency HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50008 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50011 - "GET /api/overview/kpis HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50014 - "GET /api/map/live?limit=20 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50017 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50020 - "GET /api/overview/kpis HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50023 - "GET /api/demo/latency HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50026 - "GET /api/overview/kpis HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50029 - "GET /api/overview/ingestion-history?hours=8 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50032 - "GET /api/map/live?limit=20 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50035 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50038 - "GET /api/overview/kpis HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50041 - "GET /api/overview/kpis HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50045 - "GET /api/overview/ingestion-history?hours=8 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50048 - "GET /api/map/live?limit=20 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50051 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50081 - "GET /api/demo/latency HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50082 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50090 - "GET /api/demo/latency HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50091 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50096 - "GET /api/overview/kpis HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50098 - "GET /api/map/live?limit=20 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50101 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50104 - "GET /api/overview/kpis HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50107 - "GET /api/overview/ingestion-history?hours=8 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50110 - "GET /api/demo/latency HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50113 - "GET /api/map/live?limit=20 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50116 - "GET /api/overview/kpis HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50119 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50122 - "GET /api/overview/kpis HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50125 - "GET /api/map/live?limit=20 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50128 - "GET /api/demo/latency HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50131 - "GET /api/overview/kpis HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50134 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50137 - "GET /api/overview/ingestion-history?hours=8 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50140 - "GET /api/map/live?limit=20 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50143 - "GET /api/overview/kpis HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50146 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50149 - "GET /api/overview/kpis HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50152 - "GET /api/demo/latency HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50155 - "GET /api/map/live?limit=20 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50158 - "GET /api/overview/kpis HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50161 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50164 - "GET /api/overview/ingestion-history?hours=8 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50167 - "GET /api/overview/kpis HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50170 - "GET /api/map/live?limit=20 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50174 - "GET /api/overview/kpis HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50177 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50180 - "GET /api/demo/latency HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50184 - "GET /api/map/live?limit=20 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50188 - "GET /api/overview/kpis HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50195 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50198 - "GET /api/overview/kpis HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50202 - "GET /api/overview/ingestion-history?hours=8 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50205 - "GET /api/map/live?limit=20 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50208 - "GET /api/demo/latency HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50211 - "GET /api/overview/kpis HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50214 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50217 - "GET /api/overview/kpis HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50220 - "GET /api/map/live?limit=20 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50223 - "GET /api/overview/kpis HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50226 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50229 - "GET /api/overview/ingestion-history?hours=8 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50232 - "GET /api/demo/latency HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50235 - "GET /api/map/live?limit=20 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50238 - "GET /api/overview/kpis HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50242 - "GET /api/map/live?limit=2000 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50244 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50247 - "GET /api/map/live?limit=2000 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50250 - "GET /api/demo/latency HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50253 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50256 - "GET /api/map/live?limit=2000 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50259 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50262 - "GET /api/demo/latency HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50265 - "GET /api/map/live?limit=2000 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50268 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50271 - "GET /api/map/live?limit=2000 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50274 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50277 - "GET /api/demo/latency HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50280 - "GET /api/map/live?limit=2000 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50283 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50286 - "GET /api/demo/latency HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50289 - "GET /api/map/live?limit=2000 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50292 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50295 - "GET /api/map/live?limit=2000 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50300 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50303 - "GET /api/demo/latency HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50308 - "GET /api/map/live?limit=2000 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50312 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50324 - "GET /api/map/live?limit=2000 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50327 - "GET /api/demo/latency HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50330 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50334 - "GET /api/map/live?limit=2000 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50337 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50340 - "GET /api/demo/latency HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50343 - "GET /api/map/live?limit=2000 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50346 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50349 - "GET /api/map/live?limit=2000 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50352 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50355 - "GET /api/demo/latency HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50358 - "GET /api/alerts?limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50361 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50364 - "POST /api/query/sql HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50367 - "GET /api/demo/latency HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50370 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50373 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50376 - "GET /api/demo/latency HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50379 - "POST /api/query/sql HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50382 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50385 - "GET /api/demo/latency HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50388 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50392 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50401 - "GET /api/demo/latency HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50404 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50407 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50410 - "GET /api/demo/latency HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50418 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50423 - "GET /api/demo/latency HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50426 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50429 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50432 - "GET /api/demo/latency HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50435 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50438 - "POST /api/vector/index-all HTTP/1.1" 200 OK
+[INDEXER] Verifying vector schema (applying migrations if needed)...
+[INDEXER] Schema verified.
+[INDEXER] Starting indexing for 500 drones...
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[INDEXER] Progress: 50/500 (skipped 0 — no text)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+INFO:     127.0.0.1:50542 - "GET /api/demo/latency HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50545 - "GET /api/health HTTP/1.1" 200 OK
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[INDEXER] Progress: 100/500 (skipped 0 — no text)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+INFO:     127.0.0.1:50585 - "POST /api/vector/search HTTP/1.1" 200 OK
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[INDEXER] Progress: 150/500 (skipped 0 — no text)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[INDEXER] Progress: 200/500 (skipped 0 — no text)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+INFO:     127.0.0.1:50664 - "GET /api/health HTTP/1.1" 200 OK
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[INDEXER] Progress: 250/500 (skipped 0 — no text)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+INFO:     127.0.0.1:50727 - "GET /api/demo/latency HTTP/1.1" 200 OK
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[INDEXER] Progress: 300/500 (skipped 0 — no text)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+INFO:     127.0.0.1:50773 - "GET /api/health HTTP/1.1" 200 OK
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[INDEXER] Progress: 350/500 (skipped 0 — no text)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[INDEXER] Progress: 400/500 (skipped 0 — no text)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+INFO:     127.0.0.1:50898 - "GET /api/health HTTP/1.1" 200 OK
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[INDEXER] Progress: 450/500 (skipped 0 — no text)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+INFO:     127.0.0.1:50928 - "GET /api/demo/latency HTTP/1.1" 200 OK
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[DEBUG] Embedding engine: OpenRouter (sk-or-v1...)
+[INDEXER] Progress: 500/500 (skipped 0 — no text)
+[INDEXER] Done. Indexed: 500 | Skipped (no text): 0 | Total: 500
+INFO:     127.0.0.1:50969 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50972 - "GET /api/demo/latency HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50975 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50978 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50981 - "GET /api/demo/latency HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50985 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50993 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50996 - "GET /api/demo/latency HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51001 - "POST /api/query/benchmark HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51004 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51007 - "GET /api/demo/latency HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51010 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51013 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51016 - "GET /api/demo/latency HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51019 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51022 - "GET /api/demo/latency HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51025 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51028 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51031 - "GET /api/demo/latency HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51034 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51043 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51046 - "GET /api/demo/latency HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51049 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51052 - "GET /api/demo/latency HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51055 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51058 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51061 - "GET /api/demo/latency HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51070 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51074 - "GET /api/demo/latency HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51077 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51080 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51083 - "GET /api/demo/latency HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51087 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51091 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51094 - "GET /api/demo/latency HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51097 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51100 - "GET /api/demo/latency HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51103 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51109 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51112 - "GET /api/demo/latency HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51115 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51118 - "GET /api/demo/latency HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51121 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51124 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51127 - "GET /api/demo/latency HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51130 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51136 - "GET /api/platform/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51138 - "GET /api/demo/latency HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51146 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51152 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51155 - "GET /api/demo/latency HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51158 - "GET /api/platform/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51165 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51168 - "GET /api/demo/latency HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51171 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51175 - "GET /api/platform/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51182 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51186 - "GET /api/demo/latency HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51189 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51192 - "GET /api/platform/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51200 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51203 - "GET /api/demo/latency HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51206 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51209 - "GET /api/platform/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51216 - "GET /api/demo/latency HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51219 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51222 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51225 - "GET /api/demo/latency HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51228 - "GET /api/platform/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51235 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51238 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51241 - "GET /api/demo/latency HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51247 - "GET /api/platform/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51254 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51260 - "GET /api/demo/latency HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51266 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51272 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51275 - "GET /api/demo/latency HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51279 - "GET /api/platform/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51287 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51290 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51294 - "GET /api/demo/latency HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51298 - "GET /api/platform/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51305 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51308 - "GET /api/demo/latency HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51312 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51315 - "GET /api/settings/demo HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51321 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51324 - "GET /api/demo/latency HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51327 - "GET /api/health HTTP/1.1" 200 OK
