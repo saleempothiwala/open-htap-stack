@@ -42,6 +42,7 @@ def _write_settings_file(s: "DemoSettings") -> None:
             "inject_breach_alerts": s.inject_breach_alerts,
             "replay_mode": s.replay_mode,
             "replay_minutes": s.replay_minutes,
+            "paused": s.paused,
         }))
     except Exception as e:
         print(f"[settings] failed to write settings file: {e}")
@@ -70,6 +71,7 @@ class DemoSettings(BaseModel):
     inject_breach_alerts: bool = False
     replay_mode: bool = False
     replay_minutes: int = 10
+    paused: bool = False
 
 
 class DemoSettingsResponse(BaseModel):
@@ -108,6 +110,19 @@ async def update_demo_settings(settings: DemoSettings):
         settings=_demo_settings,
         message="Demo settings updated successfully",
     )
+
+
+@router.post("/demo/pause")
+async def toggle_pause():
+    """Toggle the data-generation pause flag and persist it immediately.
+    The producer picks up the change within its next settings-poll cycle (~10 s).
+    """
+    global _demo_settings
+    _demo_settings = _demo_settings.model_copy(update={"paused": not _demo_settings.paused})
+    _write_settings_file(_demo_settings)
+    state = "paused" if _demo_settings.paused else "resumed"
+    print(f"[settings] data generation {state}")
+    return {"success": True, "paused": _demo_settings.paused, "message": f"Data generation {state}"}
 
 
 @router.post("/demo/inject-alert")

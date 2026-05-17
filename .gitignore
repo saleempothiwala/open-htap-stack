@@ -6,6 +6,7 @@ cassandra_debug.log
 spark/ivy/cache/
 spark/ivy/jars/
 venv/
+.venv/
 
 # Python
 __pycache__/

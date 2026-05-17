@@ -577,14 +577,18 @@ def _poll_settings(settings_file: str, state: dict, stop: threading.Event, inter
             data = _json.loads(path.read_text())
             new_eps = int(data.get("events_per_sec", state["eps"]))
             new_n = int(data.get("drones_enabled", state["n_entities"]))
+            new_paused = bool(data.get("paused", state["paused"]))
             if new_eps != state["eps"] or new_n != state["n_entities"]:
                 print(
                     f"[producer] settings updated from file — "
                     f"eps: {state['eps']} → {new_eps}, "
                     f"n_entities: {state['n_entities']} → {new_n}"
                 )
+            if new_paused != state["paused"]:
+                print(f"[producer] data generation {'PAUSED' if new_paused else 'RESUMED'} via settings file")
             state["eps"] = new_eps
             state["n_entities"] = new_n
+            state["paused"] = new_paused
         except Exception as e:
             print(f"[producer] settings file poll error (using current values): {e}")
 
@@ -598,7 +602,7 @@ def main() -> None:
     n_entities = max(1, env_int("N_ENTITIES", 100))
 
     # Shared mutable settings — updated by the polling thread
-    live = {"eps": eps, "n_entities": n_entities}
+    live = {"eps": eps, "n_entities": n_entities, "paused": False}
 
     # Optional settings file polling (written by backend, mounted via compose)
     settings_file = os.getenv("SETTINGS_FILE", "/app/settings-cache/demo-settings.json")
@@ -674,9 +678,15 @@ def main() -> None:
             # Read latest settings from polling thread (atomic dict read)
             eps = live["eps"]
             n_entities = live["n_entities"]
+            is_paused = live["paused"]
             period_ms = max(5, env_int("BATCH_PERIOD_MS", 50))
             period_s = period_ms / 1000.0
             batch_n = max(1, int(eps * period_s))
+
+            if is_paused:
+                # Generation paused — keep loop alive but do no work
+                time.sleep(period_s)
+                continue
 
             ids = (np.arange(ptr, ptr + batch_n, dtype=np.int64) % n_entities)
             ptr = int((ptr + batch_n) % n_entities)

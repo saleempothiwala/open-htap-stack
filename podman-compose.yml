@@ -197,6 +197,7 @@ services:
       TOPIC: "demo-events"
       EVENTS_PER_SEC: "5000"
       N_ENTITIES: "100"
+      MAX_ENTITIES: "2000"
       BATCH_PERIOD_MS: "50"
       TEXT_FILE: "/app/wikipedia.txt"
       TEXT_REFRESH_MIN_S: "10.0"

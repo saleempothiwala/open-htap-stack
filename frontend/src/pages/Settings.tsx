@@ -8,6 +8,7 @@ interface DemoSettings {
   inject_breach_alerts: boolean
   replay_mode: boolean
   replay_minutes: number
+  paused: boolean
 }
 
 function MaterialIcon({ name, className = '' }: { name: string; className?: string }) {
@@ -60,6 +61,7 @@ export default function SettingsPage() {
     inject_breach_alerts: false,
     replay_mode: false,
     replay_minutes: 10,
+    paused: false,
   })
 
   // Only load from server once on first mount — prevents the refetch poll
@@ -136,6 +138,22 @@ export default function SettingsPage() {
     onError: () => setToast({ message: 'Failed to inject alert', type: 'error' }),
   })
 
+  const pauseMutation = useMutation({
+    mutationFn: async () => {
+      const r = await fetch('/api/settings/demo/pause', { method: 'POST' })
+      if (!r.ok) throw new Error('Pause toggle failed')
+      return r.json()
+    },
+    onSuccess: (data) => {
+      setSettings((prev) => ({ ...prev, paused: data.paused }))
+      setToast({
+        message: data.paused ? '⏸ Data generation paused' : '▶ Data generation resumed',
+        type: 'success',
+      })
+    },
+    onError: () => setToast({ message: 'Failed to toggle pause', type: 'error' }),
+  })
+
   const scenarioMutation = useMutation({
     mutationFn: async () => {
       const r = await fetch('/api/demo/trigger-breach-scenario', { method: 'POST' })
@@ -178,11 +196,11 @@ export default function SettingsPage() {
                 <label className="text-[#a8abb3] text-[0.6875rem] uppercase tracking-[0.15em] font-medium">Active Drones</label>
                 <span className="text-[#99f7ff] text-xs font-bold">{settings.drones_enabled}</span>
               </div>
-              <input type="range" min="10" max="500" value={settings.drones_enabled}
+              <input type="range" min="10" max="2000" value={settings.drones_enabled}
                 onChange={(e) => setSettings({ ...settings, drones_enabled: Number(e.target.value) })}
                 className="w-full accent-[#99f7ff]" />
               <div className="flex justify-between text-[9px] text-[#a8abb3]/50 mt-1 font-medium">
-                <span>10</span><span>500</span>
+                <span>10</span><span>2,000</span>
               </div>
             </div>
             <div>
@@ -228,6 +246,32 @@ export default function SettingsPage() {
         <div className="glass-panel rounded-xl p-8">
           <h3 className="font-headline text-lg font-bold uppercase tracking-wide mb-6">Demo Actions</h3>
           <div className="space-y-4">
+
+            {/* ── Pause / Resume ─────────────────────────────────── */}
+            <button
+              onClick={() => pauseMutation.mutate()}
+              disabled={pauseMutation.isPending}
+              className={`w-full relative overflow-hidden px-6 py-5 font-headline font-black tracking-widest uppercase transition-all cursor-pointer active:scale-95 rounded-lg flex items-center justify-center gap-3 text-base border-2 ${
+                settings.paused
+                  ? 'bg-gradient-to-r from-[#feaa00]/20 to-[#ff7162]/10 border-[#feaa00] text-[#feaa00] shadow-[0_0_24px_rgba(254,170,0,0.25)] animate-pulse'
+                  : 'bg-gradient-to-r from-[#99f7ff]/15 to-[#00e2ee]/5 border-[#99f7ff]/60 text-[#99f7ff] hover:border-[#99f7ff] hover:shadow-[0_0_18px_rgba(153,247,255,0.2)]'
+              }`}
+            >
+              {pauseMutation.isPending ? (
+                <><MaterialIcon name="sync" className="animate-spin" /> Working...</>
+              ) : settings.paused ? (
+                <><MaterialIcon name="play_circle" className="text-[22px]" /> Resume Data Generation</>
+              ) : (
+                <><MaterialIcon name="pause_circle" className="text-[22px]" /> Pause Data Generation</>
+              )}
+            </button>
+
+            {settings.paused && (
+              <p className="text-center text-[#feaa00]/80 text-xs font-medium tracking-wide animate-pulse">
+                ⚠ Producer is paused — no new events are being generated
+              </p>
+            )}
+
             <div className="flex items-center justify-between p-4 bg-[#151a21] rounded">
               <div>
                 <p className="font-headline font-bold text-[#f1f3fc] uppercase text-sm tracking-tight">Inject Breach Alerts</p>
