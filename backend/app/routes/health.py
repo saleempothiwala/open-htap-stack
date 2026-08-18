@@ -13,7 +13,7 @@ SERVICE_CHECKS = [
     ("Cassandra", settings.cassandra_host, settings.cassandra_port),
     ("Kafka", "localhost", 9092),
     ("Presto/Trino", settings.trino_host, settings.trino_port),
-    ("Spark", "localhost", 8080),
+    ("Spark", "localhost", 10000),
 ]
 
 
